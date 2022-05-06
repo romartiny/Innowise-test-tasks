@@ -1,5 +1,5 @@
 .idea
-.DS_STORE
+.DS_Store
 vendor
 composer.lock
 composer.json
