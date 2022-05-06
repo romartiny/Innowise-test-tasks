@@ -1,2 +1,7 @@
-*.idea
-*.DS_STORE
+.idea
+.DS_STORE
+vendor
+composer.lock
+composer.json
+composer.phar
+.php-cs-fixer.cache
