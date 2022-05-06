@@ -6,3 +6,4 @@ composer.json
 composer.phar
 .php-cs-fixer.cache
 .php-cs-fixer.php
+.php_cs.dist.php
