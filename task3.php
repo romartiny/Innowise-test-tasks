@@ -11,7 +11,7 @@ class task3
         $sum = 0;
 
         while ($num > 0 || $sum > 9) {
-            if ($num === 0) {
+            if ($num == 0) {
                 $num = $sum;
                 $sum = 0;
             }
