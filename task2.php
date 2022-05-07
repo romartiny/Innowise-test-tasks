@@ -20,10 +20,10 @@ class task2
             $nextBirthDate = mktime(0, 0, 0, $inDate[1], $inDate[2], date('Y')) - $time / $secondsInDay;
         }
 
-        return (int) $nextBirthDate;
+        return $nextBirthDate;
     }
 
-    public function main($date): string
+    public function main($date): int
     {
         return $this->birthday($date);
     }
