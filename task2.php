@@ -4,7 +4,7 @@ namespace src;
 
 class task2
 {
-    public function birthday($date): int
+    public function birthday(string $date): int
     {
         $inDate = explode('-', $date);
         if (checkdate($inDate[1], $inDate[2], $inDate[0])) {
@@ -34,4 +34,4 @@ class task2
 }
 
 $object = new Task2();
-echo $object->main('2001-013-21');
+echo $object->main('2001-03-21');
