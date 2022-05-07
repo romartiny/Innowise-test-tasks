@@ -16,4 +16,4 @@ class task1
 }
 
 $object = new task1();
- echo $object->main(32);
+ echo $object->main(33);
