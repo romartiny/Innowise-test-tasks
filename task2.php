@@ -9,18 +9,18 @@ class task2
         $inDate = explode('-', $date);
         $secondsInDay = 24 * 60 * 60;
         $today = date('Y-m-d');
-        $newDate = date('Y-m-d', strtotime($today.' + 1 year'));
-        $inToday = explode('-', $newDate);
-        echo $inToday[0];
-        $timeBirthday = mktime(0, 0, 0, $inDate[1], $inDate[2], $inDate[0]);
+        $inToday = explode('-', $today);
+        $inYear = (int) $inToday[0] + 1;
+        $time = time();
+        $timeBirthday = mktime(0, 0, 0, $inDate[1], $inDate[2], date('Y'));
 
-        if ($timeBirthday < $today) {
-            $nextBirthDate = ((mktime(0, 0, 0, $inDate[1], $inDate[2], date('Y', strtotime($today.' + 1 year')))) - $today) / $secondsInDay;
+        if ($timeBirthday < $time) {
+            $nextBirthDate = (mktime(0, 0, 0, $inDate[1], $inDate[2], $inYear) - $time) / $secondsInDay;
         } else {
-            $nextBirthDate = ((mktime(0, 0, 0, $inDate[1], $inDate[2], date('Y')))) - $today) / $secondsInDay;
+            $nextBirthDate = mktime(0, 0, 0, $inDate[1], $inDate[2], date('Y')) - $time / $secondsInDay;
         }
 
-        return $nextBirthDate;
+        return (int) $nextBirthDate;
     }
 
     public function main($date): string
@@ -30,4 +30,4 @@ class task2
 }
 
 $object = new Task2();
-echo $object->main('2031-03-21');
+echo $object->main('2001-03-21');
