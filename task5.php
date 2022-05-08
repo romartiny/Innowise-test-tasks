@@ -4,20 +4,29 @@ namespace src;
 
 class task5
 {
-    public function fib(int $n): int
+    public function fib(int $n): string
     {
-        $fib = 0;
-        $ter = 0;
-
-        for ($i = 1; $i < $n; ++$i) {
-            while ($fib <= 100) {
-                $fib = round(((sqrt(5) + 1) / 2) ** $ter / sqrt(5));
-                ++$ter;
-            }
+        if ($n < 0) {
+            echo 'Incorrect data';
+            exit;
         }
-        return $fib;
+        $num = 0;
+        do {
+            $fib = round(((sqrt(5) + 1) / 2) ** $num / sqrt(5));
+            $fibLen = \strlen((string) $fib);
+            ++$num;
+        } while ($n > $fibLen);
+
+        return strval($fib);
+    }
+
+    public function main(int $n): string
+    {
+//        return $this->fib($n);
+
+        return strval(1.3584235674876E+42 + 1 );
     }
 }
 
 $object = new task5();
-echo $object->fib(12);
+echo $object->main(17);
