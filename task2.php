@@ -2,36 +2,41 @@
 
 namespace src;
 
-class task2
+class Task2
 {
     public function birthday(string $date): int
     {
         $inDate = explode('-', $date);
-        if (checkdate($inDate[1], $inDate[2], $inDate[0])) {
-            $secondsInDay = 24 * 60 * 60;
-            $today = date('Y-m-d');
-            $inToday = explode('-', $today);
-            $inYear = (int) $inToday[0] + 1;
-            $time = time();
-            $timeBirthday = mktime(0, 0, 0, $inDate[1], $inDate[2], date('Y'));
+        $secondsInDay = 24 * 60 * 60;
+        $today = date('Y-m-d');
+        $inToday = explode('-', $today);
+        $inYear = (int) $inToday[0];
+        $time = time();
+        $timeBirthday = mktime(0, 0, 0, $inDate[1], $inDate[2], $inDate[0]);
 
-            if ($timeBirthday < $time) {
-                $nextBirthDate = (mktime(0, 0, 0, $inDate[1], $inDate[2], $inYear) - $time) / $secondsInDay;
-            } else {
-                $nextBirthDate = mktime(0, 0, 0, $inDate[1], $inDate[2], date('Y')) - $time / $secondsInDay;
-            }
-        } else {
-            echo 'Wrong Data';
-            exit;
+        if (!checkdate($inDate[0], $inDate[1], $inDate[2])) {
+            throw new \InvalidArgumentException();
         }
-        return $nextBirthDate;
+
+        if ($inToday[1] === $inDate[1] && $inDate[2] === $inToday[2]) {
+            return 0;
+        }
+
+        if ($timeBirthday < $time) {
+            $nextBirthDate = (mktime(0, 0, 0, $inDate[1], $inDate[2], $inYear + 1) - $time) / $secondsInDay;
+
+        } else {
+            $nextBirthDate = (mktime(0, 0, 0, $inDate[1], $inDate[2], date('Y')) - $time) / $secondsInDay;
+        }
+
+        return round($nextBirthDate) + 1;
     }
 
-    public function main($date): int
+    public function main(string $date): int
     {
         return $this->birthday($date);
     }
 }
 
 $object = new Task2();
-echo $object->main('2001-03-21');
+echo $object->main('0-0-0');
