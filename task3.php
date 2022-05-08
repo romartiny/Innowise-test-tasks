@@ -1,21 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
 namespace src;
 
 class task3
 {
     public function add(int $num): int
     {
+
         $sum = 0;
 
         while ($num > 0 || $sum > 9) {
-            if ($num == 0) {
+            if (0 == $num) {
                 $num = $sum;
                 $sum = 0;
             }
-            $sum += $num % 10;
+            $sum = ($num % 10) + $sum;
             $num = $num / 10;
         }
 
