@@ -29,6 +29,3 @@ class Task8
         return \is_string($json) && (\is_object(json_decode($json)) || \is_array(json_decode($json)));
     }
 }
-
-// $object = new Task8();
-// echo $object->main('{"Title": "The Cuckoos Calling", "Author": "Robert Galbraith","Detail": {"Publisher": "Little Brown"}}');
