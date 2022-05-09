@@ -75,6 +75,3 @@ class Task12
     }
 
 }
-
-//$myCalc = new Task12(12, 6);
-//echo $myCalc->multiply()->divideBy(-12);
