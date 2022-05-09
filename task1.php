@@ -19,5 +19,3 @@ class Task1
     }
 }
 
-$object = new task1();
- echo $object->main(33);
