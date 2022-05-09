@@ -23,6 +23,3 @@ class Task10
         return print_r($newArr);
     }
 }
-
-//$object = new Task10();
-//echo $object->main(-1);
