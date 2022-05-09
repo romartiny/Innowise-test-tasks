@@ -2,7 +2,7 @@
 
 namespace src;
 
-class task7
+class Task7
 {
     public function main(array $arr, int $position): array|string
     {
@@ -15,6 +15,3 @@ class task7
         return print_r($newArr);
     }
 }
-
-$object = new Task7();
-echo $object->main([1, 2, 3, 4, 5], 3);
