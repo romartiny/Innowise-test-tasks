@@ -2,7 +2,7 @@
 
 namespace src;
 
-class task5
+class Task5
 {
     public function fib(int $n): string
     {
