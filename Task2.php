@@ -37,6 +37,3 @@ class Task2
         return $this->birthday($date);
     }
 }
-
-$object = new Task2();
-echo $object->main('0-0-0');
