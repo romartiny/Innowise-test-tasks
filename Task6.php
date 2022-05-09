@@ -30,6 +30,3 @@ class Task6
         return $counter;
     }
 }
-
-//$object = new Task6();
-//echo $object->main(2009, 2021, 07, 10, $day = 'Monday');
