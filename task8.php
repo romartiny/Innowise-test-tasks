@@ -2,47 +2,33 @@
 
 namespace src;
 
-class task8
+class Task8
 {
-    public function main(string $json): object|string
+    public function main($json): string
     {
+        if (false === $this->isJson($json)) {
+            throw new \InvalidArgumentException();
+        }
         $decoded_json = json_decode($json, true);
-
-        $keys = array_keys($decoded_json);
-
-//        foreach ($parentArray as $childArray) {
-//            foreach ($childArray as $value)
-//            {
-//                $decoded_json[] = $value;
-//            }
-//        }
-
-
-//        for($i=0;$i<count($decoded_json);$i++)
-//        {
-//            if(is_array($decoded_json)) {
-//                foreach ($decoded_json[$keys[$i]] as $key => $value) {
-//                    echo $key . ": " . $value;
-//                }
-//            }
-//        }
-
-
-
-        foreach ($decoded_json as $key => $data1) {
-            if(is_array($data1[4])) {
-//                implode(" ",$decoded_json);
+        $text = '';
+        foreach ($decoded_json as $key => $data) {
+            if (\is_array($data)) {
+                foreach ($data as $fKey => $fData) {
+                    $text = $text.$fKey.': '.$fData;
+                }
             } else {
-                echo $key, ": ";
-                echo $data1, "\n";
+                $text = $text.$key.': '.$data."\r\n";
             }
         }
-//        print_r($decoded_json);
 
+        return $text;
+    }
 
-        return print_r($decoded_json);
+    public function isJson($json): bool
+    {
+        return \is_string($json) && (\is_object(json_decode($json)) || \is_array(json_decode($json)));
     }
 }
 
-$object = new Task8();
-echo $object->main('{"Title": "The Cuckoos Calling", "Author": "Robert Galbraith","Detail": {"Publisher": "Little Brown"}}');
+// $object = new Task8();
+// echo $object->main('{"Title": "The Cuckoos Calling", "Author": "Robert Galbraith","Detail": {"Publisher": "Little Brown"}}');
