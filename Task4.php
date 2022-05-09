@@ -2,7 +2,7 @@
 
 namespace src;
 
-class task4
+class Task4
 {
     public function string(string $input): string
     {
@@ -16,6 +16,3 @@ class task4
         return $this->string($input);
     }
 }
-
-$object = new task4();
-echo $object->string('The quick-brown_fox jumps over the_lazy-dog');
