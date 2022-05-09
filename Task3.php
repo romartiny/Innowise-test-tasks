@@ -2,11 +2,13 @@
 
 namespace src;
 
-class task3
+class Task3
 {
-    public function add(int $num): int
+    public function main(int $num): int
     {
-
+        if ($num < 9 || !is_int($num)) {
+            throw new \InvalidArgumentException();
+        }
         $sum = 0;
 
         while ($num > 0 || $sum > 9) {
@@ -20,12 +22,4 @@ class task3
 
         return $sum;
     }
-
-    public function main(int $num): int
-    {
-        return $this->add($num);
-    }
 }
-
-$object = new task3();
-echo $object->main(5689);
