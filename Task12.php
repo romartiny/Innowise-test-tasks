@@ -40,7 +40,7 @@ class Task12
 
     public function divide()
     {
-        if ($this->second === 0) {
+        if (0 === $this->second) {
             throw new \InvalidArgumentException();
         }
         $this->result = $this->first / $this->second;
@@ -67,11 +67,11 @@ class Task12
 
     public function divideBy(int $div)
     {
-        if ($div == 0 || !is_int($div)) {
+        if (0 == $div || !\is_int($div)) {
             throw new \InvalidArgumentException();
         }
         $this->result /= $div;
         return $this;
     }
-
 }
+
