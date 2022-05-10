@@ -9,9 +9,9 @@ class Task7
         if (empty($arr) || $position < 0 || \count($arr) <= $position) {
             throw new \InvalidArgumentException();
         }
-
         unset($arr[$position]);
         $newArr = array_values($arr);
+
         return print_r($newArr);
     }
 }
