@@ -27,6 +27,7 @@ class Task6
         foreach ($dateList as $val) {
             echo $val, PHP_EOL;
         }
+
         return $counter;
     }
 }
