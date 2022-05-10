@@ -23,18 +23,21 @@ class Task12
     public function add()
     {
         $this->result = $this->first + $this->second;
+
         return $this;
     }
 
     public function subtract()
     {
         $this->result = $this->first - $this->second;
+
         return $this;
     }
 
     public function multiply()
     {
         $this->result = $this->first * $this->second;
+
         return $this;
     }
 
@@ -44,24 +47,28 @@ class Task12
             throw new \InvalidArgumentException();
         }
         $this->result = $this->first / $this->second;
+
         return $this;
     }
 
     public function AddBy(int $add)
     {
         $this->result += $add;
+
         return $this;
     }
 
     public function subtractBy(int $sub)
     {
         $this->result -= $sub;
+
         return $this;
     }
 
     public function multiplyBy(int $multi)
     {
         $this->result *= $multi;
+
         return $this;
     }
 
@@ -71,7 +78,7 @@ class Task12
             throw new \InvalidArgumentException();
         }
         $this->result /= $div;
+
         return $this;
     }
 }
-
