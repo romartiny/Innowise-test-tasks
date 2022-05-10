@@ -15,7 +15,7 @@ class Task9
         $newArr = [];
         for ($i = 0; $i < $countArr; ++$i) {
             if ($arr[$i] + $arr[$i + 1] + $arr[$i + 2] === $number) {
-                $newArr[] = "'{$arr[$i]} + {$arr[$i + 1]} + {$arr[$i + 2]} = {$number}'";
+                $newArr[] = "['0' => '{$arr[$i]} + {$arr[$i + 1]} + {$arr[$i + 2]} = {$number}']";
             }
         }
 
