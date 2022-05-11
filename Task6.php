@@ -17,7 +17,7 @@ class Task6
             for ($i = $startDay; $i <= $endDay; $i += 86400) {
                 $monday = date('d', $i);
                 $current_day = date('w', $i);
-                if (1 == $current_day && 1 == $monday) {
+                if (01 == $current_day && 01 == $monday) {
                     $fullDay = date('d-m-Y', $i);
                     $dateList[] = $fullDay;
                     ++$counter;
