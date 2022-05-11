@@ -12,7 +12,7 @@ class Task3
         $sum = 0;
 
         while ($num > 0 || $sum > 9) {
-            if (0 === $num) {
+            if (0 == $num) {
                 $num = $sum;
                 $sum = 0;
             }
