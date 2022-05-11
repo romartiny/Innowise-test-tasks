@@ -19,6 +19,6 @@ class Task9
             }
         }
 
-        return print_r($newArr);
+        return $newArr;
     }
 }
