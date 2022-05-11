@@ -20,6 +20,6 @@ class Task10
             }
         }
 
-        return print_r($newArr);
+        return $newArr;
     }
 }
