@@ -1,1 +1,11 @@
-<?php//require_once __DIR__ . '/controllers/UserController.php';//require_once __DIR__ . '/models/User.php';//require_once __DIR__ . '/models/BaseModel.php';use App\Controllers\UserController;//use App\Models\User;//use App\Models\BaseModel;$user = new UserController();$user->fetch("SELECT * FROM users");$user->$userController = new UserController($user);//$userController->index('SELECT * FROM users');
+<?php
+include_once __DIR__ . '/Controller/UserController.php';
+include_once __DIR__ . '/Config/Config.php';
+$controller = new UserController();
+
+if(!isset($_REQUEST['action'])) {
+    $controller->index();
+} else {
+    $action = $_REQUEST['action'];
+    call_user_func(array($controller, $action));
+}
