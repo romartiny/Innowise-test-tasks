@@ -43,5 +43,6 @@
             </tbody>
         </table>
     </div>
+<link href="assets/js/main.js">
 </body>
 </html>

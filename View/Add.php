@@ -19,12 +19,12 @@
                     <div form-outline mb-4>
                         <input type="hidden" name="id" value="<?php echo $user->id; ?>">
                         <label for="name">Your Name</label>
-                        <input type="text" name="name" id="name" class="form-control" placeholder="First and Last name">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="First and Last name" required>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="email">Your Email</label>
-                            <input type="email" name="email" class="form-control" placeholder="Email">
+                            <input type="email" name="email" class="form-control" placeholder="Email" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-md-8">
                         <a class="btn btn-secondary back-button" href="Index.php">Back</a>
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" value="Submit" class="btn btn-primary">Add</button>
                     </div>
                 </form>
             </div>
