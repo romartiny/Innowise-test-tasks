@@ -16,7 +16,7 @@
             <div class="col-md-8 mx-auto form-block">
                 <h1 class="text-center">UserMove</h1>
                 <form action="?action=add" method="post">
-                    <div form-outline mb-4>
+                    <div class="form-outline">
                         <input type="hidden" name="id" value="<?php echo $user->id; ?>">
                         <label for="name">Your Name</label>
                         <input type="text" name="name" id="name" class="form-control" placeholder="First and Last name" required>
@@ -29,12 +29,12 @@
                     </div>
                     <div class="form-group">
                         <label for="gender">Select gender</label>
-                        <select name="gender" class="form-select col-1">
+                        <select id="gender" name="gender" class="form-select col-1">
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
                         <label for="status">Select status</label>
-                        <select name="status" class="form-select col-4">
+                        <select id="status" name="status" class="form-select col-4">
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>
                         </select>

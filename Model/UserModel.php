@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/../Model/DatabaseConfig.php';
 
-class UserModel extends DatabaseConfig {
-    public $connect;
+class UserModel extends DatabaseConfig { //extends require
+    public PDO $connect;
     public $id;
-    public $name;
-    public $email;
-    public $gender;
-    public $status;
+    public string $name;
+    public string $email;
+    public string $gender;
+    public string $status;
 
     public function __construct()
     {
@@ -59,7 +59,7 @@ class UserModel extends DatabaseConfig {
         }
     }
 
-    public function deleteUser($id)
+    public function deleteUser(int $id)
     {
         try {
             $query = "DELETE FROM users WHERE id=?";

@@ -21,10 +21,11 @@
                     <th class="text-center">Email</th>
                     <th class="text-center">Gender</th>
                     <th class="text-center">Status</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ((array)$this->getUserData() as $key) :?>
+            <?php foreach ($this->getUserData() as $key) :?>
             <tr>
                 <td class="text-center"><?php echo $key->name; ?></td>
                 <td class="text-center"><?php echo $key->email; ?></td>

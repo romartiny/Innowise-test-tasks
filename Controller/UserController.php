@@ -1,24 +1,26 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
+
 include_once __DIR__ . '/../Model/UserModel.php';
 
 class UserController extends UserModel
 {
-    public $model;
+    public UserModel $model;
 
     public function __construct()
     {
         $this->model = new UserModel();
     }
 
-    public function initController()
+    public function init()
     {
         $controller = new UserController();
-        if(!isset($_REQUEST['action'])) {
+        if (!isset($_REQUEST['action'])) {
             $controller->index();
         } else {
             $action = $_REQUEST['action'];
-            [$controller, $action]();
+            $controller->$action();
         }
     }
 
@@ -37,9 +39,9 @@ class UserController extends UserModel
         require_once __DIR__ . '/../View/Add.php';
     }
 
-    public function add()
+    #[NoReturn] public function add()
     {
-        $user = new UserModel();
+        $user = new UserModel(); //create for user
         $user->id = $_POST['id'];
         $user->name = $_POST['name'];
         $user->email = $_POST['email'];
@@ -55,7 +57,7 @@ class UserController extends UserModel
         exit();
     }
 
-    public function delete()
+    #[NoReturn] public function delete()
     {
         $this->model->deleteUser($_REQUEST['id']);
 
@@ -63,7 +65,7 @@ class UserController extends UserModel
         exit();
     }
 
-    public function getUserData()
+    public function getUserData() : array
     {
         return $this->model->getData();
     }
