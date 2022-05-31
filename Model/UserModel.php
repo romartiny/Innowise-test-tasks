@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../Config/Config.php';
+require_once __DIR__ . '/../Model/DatabaseConfig.php';
 
-class UserModel extends Config {
+class UserModel extends DatabaseConfig {
     public $connect;
     public $id;
     public $name;
@@ -12,7 +12,7 @@ class UserModel extends Config {
 
     public function __construct()
     {
-        $this->connect = Config::connection();
+        $this->connect = DatabaseConfig::connection();
     }
 
     public function getSingleId($id)
