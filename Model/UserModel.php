@@ -1,18 +1,19 @@
 <?php
 
-require_once __DIR__ . '/../Model/DatabaseConfig.php';
+require_once __DIR__ . '/../Config/DatabaseConfig.php';
 
-class UserModel extends DatabaseConfig { //extends require
-    public PDO $connect;
+class UserModel
+{
     public $id;
     public string $name;
     public string $email;
     public string $gender;
     public string $status;
+    public DatabaseConfig $connect;
 
     public function __construct()
     {
-        $this->connect = DatabaseConfig::connection();
+        return $this->connect = new DatabaseConfig();
     }
 
     public function getSingleId($id)
@@ -27,7 +28,7 @@ class UserModel extends DatabaseConfig { //extends require
         }
     }
 
-    public function updateData($data)
+    public function updateData($data): void
     {
         try {
             $query = "UPDATE users SET name = ?, email = ?, gender = ?, status = ? WHERE id=?";
@@ -49,7 +50,7 @@ class UserModel extends DatabaseConfig { //extends require
         }
     }
 
-    public function addUser(UserModel $data)
+    public function addUser(UserModel $data): void
     {
         try {
             $query = "INSERT into users (name, email, gender, status) VALUES (?,?,?,?)";
@@ -59,7 +60,7 @@ class UserModel extends DatabaseConfig { //extends require
         }
     }
 
-    public function deleteUser(int $id)
+    public function deleteUser(int $id): void
     {
         try {
             $query = "DELETE FROM users WHERE id=?";
