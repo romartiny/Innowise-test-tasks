@@ -14,7 +14,7 @@
     <div class="center-block">
         <h1 class="text-center main-text">UserMove</h1>
     </div>
-    <a href="?action=save" class="btn btn-success button-new">New user</a>
+    <a href="?action=create" class="btn btn-success button-new">New user</a>
         <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light">
                 <tr>
@@ -34,7 +34,7 @@
                 <td class="text-center"><?php echo $key->status; ?></td>
                 <td class="text-center">
                     <a href="?action=delete&id=<?php echo $key->id; ?>" class="btn red btn-danger">Delete</a>
-                    <a href="?action=save&id=<?php echo $key->id; ?>" class="btn btn-primary">Edit</a>
+                    <a href="?action=edit&id=<?php echo $key->id; ?>" class="btn btn-primary">Edit</a>
                 </td>
             </tr>
             <?php endforeach; ?>

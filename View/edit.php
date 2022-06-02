@@ -15,8 +15,10 @@
         <div class="row align-items-center">
             <div class="col-md-8 mx-auto form-block">
                 <h1 class="text-center">UserMove</h1>
-                <form action="?action=add" method="post">
+                <p class="text-center">Edit <?php echo $user->name; ?> data</p>
+                <form action="?action=editor" method="post">
                     <div class="form-outline">
+                        <input type="hidden" name="id" value="<?php echo $user->id; ?>">
                         <label for="name">Your Name</label>
                         <input type="text" name="name" id="name" class="form-control" placeholder="First and Last name" required>
                     </div>

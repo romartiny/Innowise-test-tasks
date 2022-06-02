@@ -29,28 +29,46 @@ class UserController
         require_once __DIR__ . '/../View/Index.php';
     }
 
-    public function save(): void
+    public function create(): void
+    {
+        $user = new UserModel();
+//        if (isset($_REQUEST['id'])) {
+//            $user = $this->model->getSingleId($_REQUEST['id']);
+//        }
+
+        require_once __DIR__ . '/../View/add.php';
+    }
+
+    public function edit(): void
     {
         $user = new UserModel();
         if (isset($_REQUEST['id'])) {
             $user = $this->model->getSingleId($_REQUEST['id']);
         }
-
-        require_once __DIR__ . '/../View/Add.php';
+//
+        require_once __DIR__ . '/../View/edit.php';
     }
 
     #[NoReturn] public function add(): void
+    {
+        $this->model->name = $_POST['name'];
+        $this->model->email = $_POST['email'];
+        $this->model->gender = $_POST['gender'];
+        $this->model->status = $_POST['status'];
+        $this->model->addUser($this->model);
+
+        header("Location: index.php");
+        exit();
+    }
+
+    #[NoReturn] public function editor(): void
     {
         $this->model->id = $_POST['id'];
         $this->model->name = $_POST['name'];
         $this->model->email = $_POST['email'];
         $this->model->gender = $_POST['gender'];
         $this->model->status = $_POST['status'];
-        if ($this->model->id > 0) {
-            $this->model->updateData($this->model);
-        } else {
-            $this->model->addUser($this->model);
-        }
+        $this->model->updateData($this->model);
 
         header("Location: index.php");
         exit();
