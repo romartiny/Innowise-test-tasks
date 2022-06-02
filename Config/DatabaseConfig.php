@@ -1,6 +1,7 @@
 <?php
 
-class DatabaseConfig {
+class DatabaseConfig
+{
     public string $host = 'localhost';
     public string $hostname = 'root';
     public string $hostpass = 'root';

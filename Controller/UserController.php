@@ -4,7 +4,8 @@ use JetBrains\PhpStorm\NoReturn;
 
 include_once __DIR__ . '/../Model/UserModel.php';
 
-class UserController {
+class UserController
+{
     public UserModel $model;
 
     public function __construct()
