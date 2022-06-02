@@ -7,6 +7,7 @@ include_once __DIR__ . '/../Model/UserModel.php';
 class UserController
 {
     public UserModel $model;
+    public array $table;
 
     public function __construct()
     {
@@ -22,19 +23,18 @@ class UserController
             $action = $_REQUEST['action'];
             $controller->$action();
         }
+        $this->getUserData();
     }
 
     public function index(): void
     {
+        $this->getUserData();
         require_once __DIR__ . '/../View/Index.php';
     }
 
     public function create(): void
     {
         $user = new UserModel();
-//        if (isset($_REQUEST['id'])) {
-//            $user = $this->model->getSingleId($_REQUEST['id']);
-//        }
 
         require_once __DIR__ . '/../View/add.php';
     }
@@ -84,6 +84,7 @@ class UserController
 
     public function getUserData() : array
     {
-        return $this->model->getData();
+        $this->table = $this->model->getData();
+        return $this->table;
     }
 }

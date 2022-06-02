@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($this->getUserData() as $key) :?>
+            <?php foreach ($this->table as $key) :?>
             <tr>
                 <td class="text-center"><?php echo $key->name; ?></td>
                 <td class="text-center"><?php echo $key->email; ?></td>
