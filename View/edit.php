@@ -16,7 +16,7 @@
             <div class="col-md-8 mx-auto form-block">
                 <h1 class="text-center">UserMove</h1>
                 <p class="text-center">Edit <?php echo $user->name; ?> data</p>
-                <form action="?action=editor" method="post">
+                <form action="index.php?action=editor" method="post">
                     <div class="form-outline">
                         <input type="hidden" name="id" value="<?php echo $user->id; ?>">
                         <label for="name">Your Name</label>

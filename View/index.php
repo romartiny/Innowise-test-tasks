@@ -14,7 +14,7 @@
     <div class="center-block">
         <h1 class="text-center main-text">UserMove</h1>
     </div>
-    <a href="?action=create" class="btn btn-success button-new">New user</a>
+    <a href="index.php?action=create" class="btn btn-success button-new">New user</a>
         <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light">
                 <tr>
