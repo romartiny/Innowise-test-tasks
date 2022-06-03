@@ -16,16 +16,17 @@
             <div class="col-md-8 mx-auto form-block">
                 <h1 class="text-center">UserMove</h1>
                 <p class="text-center">Edit <?php echo $user->name; ?> data</p>
-                <form action="index.php?action=editor" method="post">
+                <form action="index.php" method="post">
+                    <input type="hidden" name="action" value="editor">
                     <div class="form-outline">
                         <input type="hidden" name="id" value="<?php echo $user->id; ?>">
                         <label for="name">Your Name</label>
-                        <input type="text" name="name" id="name" class="form-control" placeholder="First and Last name" required>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="First and Last name" value="<?php echo $user->name; ?>" required>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="email">Your Email</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="Email" value="<?php echo $user->email; ?>" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -41,7 +42,8 @@
                         </select>
                     </div>
                     <div class="button-block">
-                        <a class="btn btn-secondary back-button" href="index.php">Back</a>
+                        <a class="btn btn-secondary back-button" href="index.php"
+                           onclick="return confirm('Are you sure you want to leave?')">Back</a>
                         <button type="submit" value="Submit" class="btn btn-primary">Add</button>
                     </div>
                 </form>

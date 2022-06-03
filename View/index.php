@@ -33,8 +33,9 @@
                 <td class="text-center"><?php echo $key->gender; ?></td>
                 <td class="text-center"><?php echo $key->status; ?></td>
                 <td class="text-center">
-                    <a href="?action=delete&id=<?php echo $key->id; ?>" class="btn red btn-danger">Delete</a>
-                    <a href="?action=edit&id=<?php echo $key->id; ?>" class="btn btn-primary">Edit</a>
+                    <a href="index.php?action=delete&id=<?php echo $key->id; ?>" class="btn red btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                    <a href="index.php?action=edit&id=<?php echo $key->id; ?>" class="btn btn-primary">Edit</a>
                 </td>
             </tr>
             <?php endforeach; ?>

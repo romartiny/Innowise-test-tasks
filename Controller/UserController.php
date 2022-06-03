@@ -8,7 +8,6 @@ class UserController
     public UserModel $model;
     public array $table;
 
-
     public function __construct()
     {
         $this->model = new UserModel();
@@ -16,19 +15,18 @@ class UserController
 
     public function init(): void
     {
-        $controller = new UserController(); //idk how to resolve
         if (!isset($_REQUEST['action'])) {
-            $controller->index();
+            $this->index();
         } else {
             $action = $_REQUEST['action'];
-            $controller->$action();
+            $this->$action();
         }
     }
 
     public function index(): void
     {
         $this->getUserData();
-        require_once __DIR__ . '/../View/Index.php';
+        require_once __DIR__ . '/../View/index.php';
     }
 
     public function create(): void
@@ -38,7 +36,6 @@ class UserController
 
     public function edit(): void
     {
-        $user = new UserModel();
         if (isset($_REQUEST['id'])) {
             $user = $this->model->getSingleId($_REQUEST['id']);
         }
@@ -48,11 +45,7 @@ class UserController
 
     public function add(): void
     {
-        $this->model->name = $_POST['name']; //$_POST -> logic in controller
-        $this->model->email = $_POST['email'];
-        $this->model->gender = $_POST['gender'];
-        $this->model->status = $_POST['status'];
-        $this->model->addUser($this->model);
+        $this->model->addUser();
 
         header("Location: index.php");
         exit();
@@ -60,12 +53,7 @@ class UserController
 
     public function editor(): void
     {
-        $this->model->id = $_POST['id']; //$_POST -> logic in controller
-        $this->model->name = $_POST['name'];
-        $this->model->email = $_POST['email'];
-        $this->model->gender = $_POST['gender'];
-        $this->model->status = $_POST['status'];
-        $this->model->updateData($this->model);
+        $this->model->updateData($_POST);
 
         header("Location: index.php");
         exit();

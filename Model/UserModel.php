@@ -28,11 +28,16 @@ class UserModel
         }
     }
 
-    public function updateData($data): void
+    public function updateData(): void
     {
+        $this->id = $_POST['id'];
+        $this->name = $_POST['name'];
+        $this->email = $_POST['email'];
+        $this->gender = $_POST['gender'];
+        $this->status = $_POST['status'];
         try {
             $query = "UPDATE users SET name = ?, email = ?, gender = ?, status = ? WHERE id=?";
-            $this->connect->prepare($query)->execute(array($data->name, $data->email, $data->gender, $data->status, $data->id));
+            $this->connect->prepare($query)->execute(array($this->name, $this->email, $this->gender, $this->status, $this->id));
         } catch (Exception $exception) {
             die($exception->getMessage());
         }
@@ -50,11 +55,15 @@ class UserModel
         }
     }
 
-    public function addUser(UserModel $data): void
+    public function addUser(): void
     {
+        $this->name = $_POST['name'];
+        $this->email = $_POST['email'];
+        $this->gender = $_POST['gender'];
+        $this->status = $_POST['status'];
         try {
             $query = "INSERT into users (name, email, gender, status) VALUES (?,?,?,?)";
-            $this->connect->prepare($query)->execute(array($data->name, $data->email, $data->gender, $data->status));
+            $this->connect->prepare($query)->execute(array($this->name, $this->email, $this->gender, $this->status));
         } catch (Exception $exception) {
             die($exception->getMessage());
         }

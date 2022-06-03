@@ -15,7 +15,8 @@
         <div class="row align-items-center">
             <div class="col-md-8 mx-auto form-block">
                 <h1 class="text-center">UserMove</h1>
-                <form action="index.php?action=add" method="post">
+                <form action="index.php" method="post">
+                    <input type="hidden" name="action" value="add">
                     <div class="form-outline">
                         <label for="name">Your Name</label>
                         <input type="text" name="name" id="name" class="form-control" placeholder="First and Last name" required>
