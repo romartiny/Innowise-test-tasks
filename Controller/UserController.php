@@ -8,6 +8,7 @@ class UserController
     public UserModel $model;
     public array $table;
 
+
     public function __construct()
     {
         $this->model = new UserModel();
