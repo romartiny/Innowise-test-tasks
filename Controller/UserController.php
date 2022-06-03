@@ -1,6 +1,7 @@
 <?php
 
 include_once __DIR__ . '/../Model/UserModel.php';
+include_once __DIR__ . '/../index.php';
 
 class UserController
 {
@@ -14,14 +15,13 @@ class UserController
 
     public function init(): void
     {
-        $controller = new UserController();
+        $controller = new UserController(); //idk how to resolve
         if (!isset($_REQUEST['action'])) {
             $controller->index();
         } else {
             $action = $_REQUEST['action'];
             $controller->$action();
         }
-        $this->getUserData();
     }
 
     public function index(): void
@@ -32,8 +32,6 @@ class UserController
 
     public function create(): void
     {
-        $user = new UserModel();
-
         require_once __DIR__ . '/../View/add.php';
     }
 
@@ -49,7 +47,7 @@ class UserController
 
     public function add(): void
     {
-        $this->model->name = $_POST['name'];
+        $this->model->name = $_POST['name']; //$_POST -> logic in controller
         $this->model->email = $_POST['email'];
         $this->model->gender = $_POST['gender'];
         $this->model->status = $_POST['status'];
@@ -61,7 +59,7 @@ class UserController
 
     public function editor(): void
     {
-        $this->model->id = $_POST['id'];
+        $this->model->id = $_POST['id']; //$_POST -> logic in controller
         $this->model->name = $_POST['name'];
         $this->model->email = $_POST['email'];
         $this->model->gender = $_POST['gender'];
