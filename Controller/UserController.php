@@ -1,7 +1,5 @@
 <?php
 
-use JetBrains\PhpStorm\NoReturn;
-
 include_once __DIR__ . '/../Model/UserModel.php';
 
 class UserController
@@ -49,7 +47,7 @@ class UserController
         require_once __DIR__ . '/../View/edit.php';
     }
 
-    #[NoReturn] public function add(): void
+    public function add(): void
     {
         $this->model->name = $_POST['name'];
         $this->model->email = $_POST['email'];
@@ -61,7 +59,7 @@ class UserController
         exit();
     }
 
-    #[NoReturn] public function editor(): void
+    public function editor(): void
     {
         $this->model->id = $_POST['id'];
         $this->model->name = $_POST['name'];
@@ -74,7 +72,7 @@ class UserController
         exit();
     }
 
-    #[NoReturn] public function delete(): void
+    public function delete(): void
     {
         $this->model->deleteUser($_REQUEST['id']);
 
