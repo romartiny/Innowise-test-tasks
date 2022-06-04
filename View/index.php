@@ -15,6 +15,7 @@
         <h1 class="text-center main-text">UserMove</h1>
     </div>
     <a href="index.php?action=create" class="btn btn-success button-new">New user</a>
+<!--    --><?php //var_dump($this->table); ?>
         <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light">
                 <tr>

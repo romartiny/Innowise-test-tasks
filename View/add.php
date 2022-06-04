@@ -30,13 +30,13 @@
                     <div class="form-group">
                         <label for="gender">Select gender</label>
                         <select id="gender" name="gender" class="form-select col-1">
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
                         </select>
                         <label for="status">Select status</label>
                         <select id="status" name="status" class="form-select col-4">
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
                         </select>
                     </div>
                     <div class="button-block">

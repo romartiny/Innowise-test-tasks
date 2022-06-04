@@ -6,7 +6,7 @@ include_once __DIR__ . '/../index.php';
 class UserController
 {
     public UserModel $model;
-    public array $table;
+    public $table;
 
     public function __construct()
     {
@@ -67,9 +67,9 @@ class UserController
         exit();
     }
 
-    public function getUserData() : array
+    public function getUserData()
     {
-        $this->table = $this->model->getData();
+        $this->table = json_decode($this->model->getData());
         return $this->table;
     }
 }
