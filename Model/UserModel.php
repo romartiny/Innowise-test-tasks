@@ -17,13 +17,13 @@ class UserModel extends Config
         $this->contoken = new Config();
     }
 
-    public function getSingleId($id): bool|string
+    public function getSingleId(int $id)
     {
         $this->id = $id;
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://gorest.co.in/public/v2/users/$this->id?access-token=$this->token",
+            CURLOPT_URL => "$this->basicUrl/$this->id?access-token=$this->token",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -45,7 +45,7 @@ class UserModel extends Config
 
         $curl = $this->getKeys();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://gorest.co.in/public/v2/users/$this->id?access-token=$this->token",
+            CURLOPT_URL => "$this->basicUrl/$this->id?access-token=$this->token",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -59,14 +59,14 @@ class UserModel extends Config
 
         $response = curl_exec($curl);
         curl_close($curl);
-        echo $response;
+        return $response;
     }
 
-    public function getData(): bool|string
+    public function getData()
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://gorest.co.in/public/v2/users?access-token=$this->token",
+            CURLOPT_URL => "$this->basicUrl?access-token=$this->token",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -82,11 +82,11 @@ class UserModel extends Config
         return $response;
     }
 
-    public function addUser(): void
+    public function addUser()
     {
         $curl = $this->getKeys();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://gorest.co.in/public/v2/users?access-token=$this->token",
+            CURLOPT_URL => "$this->basicUrl?access-token=$this->token",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -100,14 +100,14 @@ class UserModel extends Config
 
         $response = curl_exec($curl);
         curl_close($curl);
-        echo $response;
+        return $response;
     }
 
-    public function deleteUser($id): void
+    public function deleteUser(int $id)
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://gorest.co.in/public/v2/users/$id?access-token=$this->token",
+            CURLOPT_URL => "$this->basicUrl/$id?access-token=$this->token",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -120,7 +120,7 @@ class UserModel extends Config
 
         $response = curl_exec($curl);
         curl_close($curl);
-        echo $response;
+        return $response;
     }
 
     /**

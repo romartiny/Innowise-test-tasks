@@ -51,7 +51,7 @@ class UserController extends Controller
 
     public function editor(): void
     {
-        $this->model->updateData($_POST);
+        $this->model->updateData();
 
         header("Location: index.php");
         exit();

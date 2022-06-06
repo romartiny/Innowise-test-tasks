@@ -32,19 +32,34 @@
                     <div class="form-group">
                         <label for="gender">Select gender</label>
                         <select id="gender" name="gender" class="form-select col-1">
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                            <option value="Male"
+                            {% if user.gender == 'male' %}
+                                selected
+                            {% endif %}
+                            >Male</option>
+                            <option value="Female"
+                                    {% if user.gender == 'female' %}
+                                        selected
+                                    {% endif %}
+                            >Female</option>
                         </select>
                         <label for="status">Select status</label>
                         <select id="status" name="status" class="form-select col-4">
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
+                            <option value="Active"
+                                    {% if user.status == 'active' %}
+                                        selected
+                                    {% endif %}
+                            >Active</option>
+                            <option value="Inactive"
+                                    {% if user.status == 'inactive' %}
+                                        selected
+                                    {% endif %}
+                            >Inactive</option>
                         </select>
                     </div>
                     <div class="button-block">
-                        <a class="btn btn-secondary back-button" href="index.php"
-                           onclick="return confirm('Are you sure you want to leave?')">Back</a>
-                        <button type="submit" value="Submit" class="btn btn-primary">Add</button>
+                        <a class="btn btn-secondary back-button" href="index.php">Back</a>
+                        <button type="submit" value="Submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
