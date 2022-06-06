@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . '/../Config/Config.php';
-//require_once __DIR__ . '/../Controller/Controller.php';
 
 class UserModel extends Config
 {
@@ -43,6 +42,7 @@ class UserModel extends Config
     public function updateData()
     {
         $this->id = $_POST['id'];
+
         $curl = $this->getKeys();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://gorest.co.in/public/v2/users/$this->id?access-token=$this->token",
@@ -106,7 +106,6 @@ class UserModel extends Config
     public function deleteUser($id): void
     {
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://gorest.co.in/public/v2/users/$id?access-token=$this->token",
             CURLOPT_RETURNTRANSFER => true,
