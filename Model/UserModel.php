@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../Config/Config.php';
+//require_once __DIR__ . '/../Controller/Controller.php';
 
 class UserModel extends Config
 {
@@ -10,7 +11,7 @@ class UserModel extends Config
     public string $gender;
     public string $status;
     public array $result;
-    private Config $contoken;
+    public Config $contoken;
 
     public function __construct()
     {
@@ -140,5 +141,4 @@ class UserModel extends Config
         ];
         return curl_init();
     }
-
 }

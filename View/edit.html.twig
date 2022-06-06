@@ -19,7 +19,7 @@
                 <form action="index.php" method="post">
                     <input type="hidden" name="action" value="editor">
                     <div class="form-outline">
-                        <input type="hidden" name="id" value="<?php echo $user->id; ?>">
+                        <input type="hidden" name="id" value="{{ user.id }}">
                         <label for="name">Your Name</label>
                         <input type="text" name="name" id="name" class="form-control" placeholder="First and Last name" value="{{ user.name }}" required>
                     </div>

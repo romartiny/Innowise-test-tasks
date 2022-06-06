@@ -5,7 +5,6 @@ use Twig\Loader\FilesystemLoader;
 
 require_once __DIR__ . '/../Model/UserModel.php';
 require_once __DIR__ . '/Controller.php';
-//require_once __DIR__ . '/../vendor/autoload.php';
 
 class UserController extends Controller
 {
