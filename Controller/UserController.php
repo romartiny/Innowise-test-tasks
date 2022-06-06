@@ -1,12 +1,16 @@
 <?php
 
-include_once __DIR__ . '/../Model/UserModel.php';
-include_once __DIR__ . '/../index.php';
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
-class UserController
+require_once __DIR__ . '/../Model/UserModel.php';
+require_once __DIR__ . '/Controller.php';
+//require_once __DIR__ . '/../vendor/autoload.php';
+
+class UserController extends Controller
 {
     public UserModel $model;
-    public $table;
+    public array $table;
 
     public function __construct()
     {
@@ -23,24 +27,22 @@ class UserController
         }
     }
 
-    public function index(): void
+    public function index()
     {
         $this->getUserData();
-        require_once __DIR__ . '/../View/index.php';
+        $this->twigIndex($this->table);
     }
 
     public function create(): void
     {
-        require_once __DIR__ . '/../View/add.php';
+        require_once __DIR__ . '/../View/add.html.twig';
     }
 
     public function edit(): void
     {
-        if (isset($_REQUEST['id'])) {
-            $user = $this->model->getSingleId($_REQUEST['id']);
-        }
-//
-        require_once __DIR__ . '/../View/edit.php';
+        $user = $this->model->getSingleId($_REQUEST['id']);
+        $user = json_decode($user);
+        $this->twigEdit($user);
     }
 
     public function add(): void

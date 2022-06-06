@@ -15,7 +15,6 @@
         <h1 class="text-center main-text">UserMove</h1>
     </div>
     <a href="index.php?action=create" class="btn btn-success button-new">New user</a>
-<!--    --><?php //var_dump($this->table); ?>
         <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light">
                 <tr>
@@ -27,19 +26,19 @@
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($this->table as $key) :?>
+            {% for key, block in users %}
             <tr>
-                <td class="text-center"><?php echo $key->name; ?></td>
-                <td class="text-center"><?php echo $key->email; ?></td>
-                <td class="text-center"><?php echo $key->gender; ?></td>
-                <td class="text-center"><?php echo $key->status; ?></td>
+                <td class="text-center">{{ block.name }}</td>
+                <td class="text-center">{{ block.email }}</td>
+                <td class="text-center">{{ block.gender }}</td>
+                <td class="text-center">{{ block.status }}</td>
                 <td class="text-center">
-                    <a href="index.php?action=delete&id=<?php echo $key->id; ?>" class="btn red btn-danger"
+                    <a href="index.php?action=delete&id={{ block.id }}" class="btn red btn-danger"
                        onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
-                    <a href="index.php?action=edit&id=<?php echo $key->id; ?>" class="btn btn-primary">Edit</a>
+                    <a href="index.php?action=edit&id={{ block.id }}" class="btn btn-primary">Edit</a>
                 </td>
             </tr>
-            <?php endforeach; ?>
+            {% endfor %}
             </tbody>
         </table>
     </div>
