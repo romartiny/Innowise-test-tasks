@@ -5,6 +5,11 @@ require_once __DIR__ . '/Controller.php';
 
 class UserController extends Controller
 {
+    public string $name;
+    public string $email;
+    public string $gender;
+    public string $status;
+    public array $result;
     public UserModel $model;
     public array $table;
 
@@ -43,7 +48,8 @@ class UserController extends Controller
 
     public function add(): void
     {
-        $this->model->addUser();
+        $result = $this->getParam();
+        $this->model->addUser($result);
 
         header("Location: index.php");
         exit();
@@ -52,7 +58,8 @@ class UserController extends Controller
     public function editor(): void
     {
         $userId = $_POST['id'];
-        $this->model->updateData($userId);
+        $result = $this->getParam();
+        $this->model->updateData($userId, $result);
 
         header("Location: index.php");
         exit();
@@ -70,5 +77,21 @@ class UserController extends Controller
     {
         $this->table = json_decode($this->model->getData());
         return $this->table;
+    }
+
+    public function getParam(): array
+    {
+        $this->name = $_POST['name'];
+        $this->email = $_POST['email'];
+        $this->gender = $_POST['gender'];
+        $this->status = $_POST['status'];
+        $this->result = [
+            "name" => "$this->name",
+            "email" => "$this->email",
+            "gender" => "$this->gender",
+            "status" => "$this->status"
+        ];
+
+        return $this->result;
     }
 }
