@@ -10,8 +10,8 @@ class UserController extends Controller
     public string $gender;
     public string $status;
     public array $result;
-    public UserModel $model;
     public array $table;
+    public UserModel $model;
 
     public function __construct()
     {
