@@ -36,14 +36,20 @@ class UserController extends Controller
 
     public function create(): void
     {
-        require_once __DIR__ . '/../View/add.html.twig';
+        $gender = $this->getGenderList();
+        $status = $this->getStatusList();
+        $this->twigAdd($gender, $status);
     }
 
     public function edit(): void
     {
+        $gender = $this->getGenderList();
+        $status = $this->getStatusList();
         $user = $this->model->getSingleId($_REQUEST['id']);
         $user = json_decode($user);
-        $this->twigEdit($user);
+
+
+        $this->twigEdit($user, $gender, $status);
     }
 
     public function add(): void
@@ -93,5 +99,21 @@ class UserController extends Controller
         ];
 
         return $this->result;
+    }
+
+    public function getGenderList(): array
+    {
+        return [
+            'Male' => 'male',
+            'Female' => 'female'
+        ];
+    }
+
+    public function getStatusList(): array
+    {
+        return [
+            'Active' => 'active',
+            'Inactive' => 'inactive'
+        ];
     }
 }

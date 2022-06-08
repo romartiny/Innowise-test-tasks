@@ -32,29 +32,19 @@
                     <div class="form-group">
                         <label for="gender">Select gender</label>
                         <select id="gender" name="gender" class="form-select col-1">
-                            <option value="Male"
-                            {% if user.gender == 'male' %}
-                                selected
-                            {% endif %}
-                            >Male</option>
-                            <option value="Female"
-                                    {% if user.gender == 'female' %}
-                                        selected
-                                    {% endif %}
-                            >Female</option>
+                            {% for key, block in gender %}
+                                <option value="{{ block }}"
+                                        {{ user.gender == 'male' ? '' : 'selected'}}
+                                >{{ key }}</option>
+                            {% endfor %}
                         </select>
                         <label for="status">Select status</label>
                         <select id="status" name="status" class="form-select col-4">
-                            <option value="Active"
-                                    {% if user.status == 'active' %}
-                                        selected
-                                    {% endif %}
-                            >Active</option>
-                            <option value="Inactive"
-                                    {% if user.status == 'inactive' %}
-                                        selected
-                                    {% endif %}
-                            >Inactive</option>
+                            {% for key, block in status %}
+                                <option value="{{ block }}"
+                                        {{ user.status == 'active' ? '' : 'selected'}}
+                                >{{ key }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="button-block">
