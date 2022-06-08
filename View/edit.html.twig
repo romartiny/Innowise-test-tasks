@@ -33,17 +33,17 @@
                         <label for="gender">Select gender</label>
                         <select id="gender" name="gender" class="form-select col-1">
                             {% for key, block in gender %}
-                                <option value="{{ block }}"
+                                <option value="{{ key }}"
                                         {{ user.gender == 'male' ? '' : 'selected'}}
-                                >{{ key }}</option>
+                                >{{ block }}</option>
                             {% endfor %}
                         </select>
                         <label for="status">Select status</label>
                         <select id="status" name="status" class="form-select col-4">
                             {% for key, block in status %}
-                                <option value="{{ block }}"
+                                <option value="{{ key }}"
                                         {{ user.status == 'active' ? '' : 'selected'}}
-                                >{{ key }}</option>
+                                >{{ block }}</option>
                             {% endfor %}
                         </select>
                     </div>

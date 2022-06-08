@@ -104,16 +104,16 @@ class UserController extends Controller
     public function getGenderList(): array
     {
         return [
-            'Male' => 'male',
-            'Female' => 'female'
+            'male' => 'Male',
+            'female' => 'Female'
         ];
     }
 
     public function getStatusList(): array
     {
         return [
-            'Active' => 'active',
-            'Inactive' => 'inactive'
+            'active' => 'Active',
+            'inactive' => 'Inactive'
         ];
     }
 }
