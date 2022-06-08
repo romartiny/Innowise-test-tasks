@@ -123,10 +123,7 @@ class UserModel extends Config
         return $response;
     }
 
-    /**
-     * @return false|CurlHandle
-     */
-    public function getKeys(): false|CurlHandle
+    public function getKeys()
     {
         $this->name = $_POST['name'];
         $this->email = $_POST['email'];
