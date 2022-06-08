@@ -25,8 +25,8 @@ class UserController extends Controller
 
     public function index()
     {
-        $this->getUserData();
-        $this->twigIndex($this->table);
+        $userData = $this->getUserData();
+        $this->twigIndex($userData);
     }
 
     public function create(): void
@@ -51,7 +51,8 @@ class UserController extends Controller
 
     public function editor(): void
     {
-        $this->model->updateData();
+        $userId = $_POST['id'];
+        $this->model->updateData($userId);
 
         header("Location: index.php");
         exit();

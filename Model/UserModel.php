@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../Config/Config.php';
 
-class UserModel extends Config
+class UserModel
 {
     public $id;
     public string $name;
@@ -10,11 +10,11 @@ class UserModel extends Config
     public string $gender;
     public string $status;
     public array $result;
-    public Config $contoken;
+    public Config $connection;
 
     public function __construct()
     {
-        $this->contoken = new Config();
+        $this->connection = new Config();
     }
 
     public function getSingleId(int $id)
@@ -23,7 +23,7 @@ class UserModel extends Config
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->contoken::BASICURL . "/$this->id?access-token=" . $this->contoken::TOKEN,
+            CURLOPT_URL => $this->connection::BASIC_URL . "/$this->id?access-token=" . $this->connection::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -39,13 +39,11 @@ class UserModel extends Config
         return $response;
     }
 
-    public function updateData()
+    public function updateData($userId)
     {
-        $this->id = $_POST['id'];
-
-        $curl = $this->getKeys();
+        $curl = $this->getParam();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->contoken::BASICURL . "/$this->id?access-token=" . $this->contoken::TOKEN,
+            CURLOPT_URL => $this->connection::BASIC_URL . "/$userId?access-token=" . $this->connection::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -66,7 +64,7 @@ class UserModel extends Config
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->contoken::BASICURL . "?access-token=" . $this->contoken::TOKEN,
+            CURLOPT_URL => $this->connection::BASIC_URL . "?access-token=" . $this->connection::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -84,9 +82,9 @@ class UserModel extends Config
 
     public function addUser()
     {
-        $curl = $this->getKeys();
+        $curl = $this->getParam();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->contoken::BASICURL . "?access-token=" . $this->contoken::TOKEN,
+            CURLOPT_URL => $this->connection::BASIC_URL . "?access-token=" . $this->connection::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -107,7 +105,7 @@ class UserModel extends Config
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->contoken::BASICURL . "/$id?access-token=" . $this->contoken::TOKEN,
+            CURLOPT_URL => $this->connection::BASIC_URL . "/$id?access-token=" . $this->connection::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -123,7 +121,7 @@ class UserModel extends Config
         return $response;
     }
 
-    public function getKeys()
+    public function getParam()
     {
         $this->name = $_POST['name'];
         $this->email = $_POST['email'];
@@ -135,6 +133,7 @@ class UserModel extends Config
             "gender" => "$this->gender",
             "status" => "$this->status"
         ];
+
         return curl_init();
     }
 }
