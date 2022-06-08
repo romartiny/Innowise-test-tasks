@@ -34,7 +34,7 @@ class UserModel
         return $response;
     }
 
-    public function updateData(int $userId, $result)
+    public function updateData(int $userId, array $result)
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -75,7 +75,7 @@ class UserModel
         return $response;
     }
 
-    public function addUser($result)
+    public function addUser(array $result)
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
