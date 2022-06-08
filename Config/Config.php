@@ -7,6 +7,6 @@ class Config
 
     public function __construct()
     {
-        return $this->token;
+        $this->token;
     }
 }
