@@ -23,7 +23,7 @@ class UserModel extends Config
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "$this->basicUrl/$this->id?access-token=$this->token",
+            CURLOPT_URL => $this->contoken::BASICURL . "/$this->id?access-token=" . $this->contoken::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -45,7 +45,7 @@ class UserModel extends Config
 
         $curl = $this->getKeys();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "$this->basicUrl/$this->id?access-token=$this->token",
+            CURLOPT_URL => $this->contoken::BASICURL . "/$this->id?access-token=" . $this->contoken::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -66,7 +66,7 @@ class UserModel extends Config
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "$this->basicUrl?access-token=$this->token",
+            CURLOPT_URL => $this->contoken::BASICURL . "?access-token=" . $this->contoken::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -86,7 +86,7 @@ class UserModel extends Config
     {
         $curl = $this->getKeys();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "$this->basicUrl?access-token=$this->token",
+            CURLOPT_URL => $this->contoken::BASICURL . "?access-token=" . $this->contoken::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -107,7 +107,7 @@ class UserModel extends Config
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "$this->basicUrl/$id?access-token=$this->token",
+            CURLOPT_URL => $this->contoken::BASICURL . "/$id?access-token=" . $this->contoken::TOKEN,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,

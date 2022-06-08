@@ -2,11 +2,6 @@
 
 class Config
 {
-    public $token = '';
-    public $basicUrl = 'https://gorest.co.in/public/v2/users';
-
-    public function __construct()
-    {
-        $this->token;
-    }
+    public const TOKEN = '';
+    public const BASICURL = 'https://gorest.co.in/public/v2/users';
 }
