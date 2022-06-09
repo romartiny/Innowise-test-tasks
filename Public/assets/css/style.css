@@ -1,0 +1,27 @@
+.body-content {
+    display: block;
+    margin-left: auto;
+    max-width: 45%;
+    height: 400px;
+}
+
+.button-block {
+    margin-top: 15px;
+    float: right;
+}
+
+.form-block {
+    border: 1px solid #121352;
+    margin: 0 auto;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.button-new {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.main-text {
+    margin-top: 10px;
+}
