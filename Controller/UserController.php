@@ -13,6 +13,7 @@ class UserController extends Controller
     public float $fileSize;
     public int $fileError;
     public int $fileCode;
+    public string $fileExif;
     public string $fileType;
     public UserModel $model;
     public Config $config;
@@ -35,7 +36,14 @@ class UserController extends Controller
 
     public function index()
     {
-        $this->twigIndex();
+        if (!empty($this->fileName)) {
+            $fileName = $this->fileName;
+            $fileSize = $this->fileSize;
+            $fileExif = $this->fileExif;
+            $this->twigResult($fileName, $fileSize, $fileExif);
+        } else {
+            $this->twigIndex();
+        }
     }
 
     public function getData()
@@ -68,6 +76,16 @@ class UserController extends Controller
         }
     }
 
+    public function isFreeSpace()
+    {
+        $freeSpace = disk_free_space(__DIR__ . "/../");
+        if ($this->fileSize > $freeSpace) {
+            $this->fileCode = 0;
+        } else {
+            $this->fileCode = 1;
+        }
+    }
+
     public function convertSize(): string
     {
         $base = log($this->fileSize, 1024);
@@ -93,13 +111,13 @@ class UserController extends Controller
             } else {
                 $exif = exif_read_data($fp);
                 $exifData = json_encode($exif);
-                $resultExif = preg_replace('/[\"\'\{\}]/', '', $exifData);
+                $this->fileExif = preg_replace('/[\"\'\{\}]/', '', $exifData);
             }
         } else {
-            $resultExif = 'No exif data';
+            $this->fileExif = 'No exif data';
         }
 
-        return $resultExif;
+        return $this->fileExif;
     }
 
     public function isExecutable()
@@ -118,6 +136,7 @@ class UserController extends Controller
 
     public function addLog()
     {
+        $this->isFreeSpace();
         $dateFile = date("d") . date("m") . date("Y");
         $logName = $this->randomFileName;
         $logTime = date("d-m-Y h:i:sa");
@@ -151,10 +170,11 @@ class UserController extends Controller
     public function add()
     {
         $this->getData();
-//        $this->isExecutable();
         $this->checkUploadDir();
         $this->checkLogDir();
+        $this->isFreeSpace();
         $this->uploadData();
+        $this->getExifData();
         $this->addLog();
         $this->index();
     }

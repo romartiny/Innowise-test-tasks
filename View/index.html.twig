@@ -11,14 +11,18 @@
 </head>
 <body>
 <div class="container">
-                <h1 class="text-center">FileUpload</h1>
-                <form action="index.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add" required>
-                    <input type="file" name="file" id="file">
-                    <div class="button-block">
-                        <button type="submit" value="submit" class="btn btn-primary">Add</button>
-                    </div>
-                </form>
+    <h1 class="text-center">FileUpload</h1>
+    <form action="index.php" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="add" required>
+        <input type="file" name="file" id="file" onchange="validateSize(this)" accept=".png, .jpg, .jpeg, .txt">
+        <div class="button-block">
+            <button type="submit" value="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+    {{ name }}
+    {{ size }}
+    {{ exif }}
 </div>
+<script src="/Public/assets/js/main.js"></script>
 </body>
 </html>
