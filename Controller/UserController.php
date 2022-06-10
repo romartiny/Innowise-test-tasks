@@ -12,6 +12,7 @@ class UserController extends Controller
     public string $fileTmpName;
     public float $fileSize;
     public int $fileError;
+    public int $fileCode;
     public string $fileType;
     public UserModel $model;
     public Config $config;
@@ -79,17 +80,40 @@ class UserController extends Controller
     {
         $uploadPath = $this->config::UPLOAD_PATH;
         $fileName = $this->randomFileName;
-        $fp = $this->model->openImage($uploadPath, $fileName);
-        if (!$fp) {
-            $exif = exif_read_data($fp);
-            if (!$exif) {
-                exit;
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+        $exifProp = ['jpg', 'png', 'jpg', 'jpeg'];
+        if (in_array($fileActualExt, $exifProp)) {
+            $fp = $this->model->openImage($uploadPath, $fileName);
+            if (!$fp) {
+                $exif = exif_read_data($fp);
+                if (!$exif) {
+                    exit;
+                }
+            } else {
+                $exif = exif_read_data($fp);
+                $exifData = json_encode($exif);
+                $resultExif = preg_replace('/[\"\'\{\}]/', '', $exifData);
             }
         } else {
-            $exif = exif_read_data($fp);
+            $resultExif = 'No exif data';
         }
-        $exifData = json_encode($exif);
-        return preg_replace('/[\"\'\{\}]/', '', $exifData);
+
+        return $resultExif;
+    }
+
+    public function isExecutable()
+    {
+        $path = realpath($this->fileName);
+        $file = __DIR__ . '/../' . $this->config::UPLOAD_PATH . $this->fileName;
+        if (is_executable($file)) {
+            $exCode = 1;
+        } else {
+            $exCode = 0;
+        }
+//        echo realpath($_FILES["file"]["tmp_name"]);
+        echo $exCode;
+        return $path;
     }
 
     public function addLog()
@@ -98,27 +122,36 @@ class UserController extends Controller
         $logName = $this->randomFileName;
         $logTime = date("d-m-Y h:i:sa");
         $logSize = $this->convertSize();
-        $logMeta = $this->getExifData();
         $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
-        $this->model->uploadLog($logFileName, $logName, $logTime, $logSize, $logMeta);
+        if ($this->fileCode === 1) {
+            $logCode = 'Upload successful';
+            $this->model->uploadGoodLog($logFileName, $logName, $logTime, $logSize, $logCode);
+        } else {
+            $logCode = 'Not upload';
+            $this->model->uploadBadLog($logFileName, $logName, $logTime, $logSize, $logCode);
+        }
     }
 
     public function uploadData()
     {
         $fileExt = explode('.', $this->fileName);
         $fileActualExt = strtolower(end($fileExt));
+        $this->randomFileName = uniqid('', true) . '.' . $fileActualExt;
+        $fileDestination = $this->config::UPLOAD_PATH . $this->randomFileName;
         if(in_array($fileActualExt, $this->config::EXTENSION)) {
             if ($this->fileError === 0) {
-                $this->randomFileName = uniqid('', true) . '.' . $fileActualExt;
-                $fileDestination = $this->config::UPLOAD_PATH . $this->randomFileName;
+                $this->fileCode = 1;
                 $this->model->uploadFile($this->fileTmpName, $fileDestination);
             }
+        } else {
+            $this->fileCode = 0;
         }
     }
 
     public function add()
     {
         $this->getData();
+//        $this->isExecutable();
         $this->checkUploadDir();
         $this->checkLogDir();
         $this->uploadData();

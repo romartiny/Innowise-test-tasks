@@ -27,10 +27,17 @@ class UserModel
         mkdir($dirname, 0777);
     }
 
-    public function uploadLog($logFileName, $logName, $logTime, $logSize, $logMeta)
+    public function uploadGoodLog($logFileName, $logName, $logTime, $logSize, $logMeta)
     {
         $logFile = fopen($logFileName, "a");
         $log = "| $logTime | $logName | $logSize | $logMeta\n";
+        fwrite($logFile, $log);
+    }
+
+    public function uploadBadLog($logFileName, $logName, $logTime, $logSize, $logCode)
+    {
+        $logFile = fopen($logFileName, "a");
+        $log = "| $logTime | $logName | $logSize | $logCode\n";
         fwrite($logFile, $log);
     }
 
