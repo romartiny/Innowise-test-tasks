@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace App\UserController;
 
-use App\Config\Config;
 use App\UserModel\UserModel;
+use App\Config\Config;
 use App\Controller\Controller as Controller;
 
 require_once __DIR__ . '/Controller.php';
@@ -40,15 +40,23 @@ class UserController extends Controller
         }
     }
 
+    public function getFileList()
+    {
+        return array_diff(scandir($this->config::UPLOAD_PATH), array('.', '..'));
+    }
+
     public function index()
     {
+        $this->checkUploadDir();
+        $this->checkLogDir();
+        $dataFiles = $this->getFileList();
         if (!empty($this->fileName)) {
             $fileName = $this->fileName;
             $fileSize = $this->fileSize;
             $fileExif = $this->fileExif;
-            $this->twigResult($fileName, $fileSize, $fileExif);
+            $this->twigResult($fileName, $fileSize, $fileExif, $dataFiles);
         } else {
-            $this->twigIndex();
+            $this->twigIndex($dataFiles);
         }
     }
 
@@ -94,10 +102,15 @@ class UserController extends Controller
 
     public function convertSize(): string
     {
-        $base = log($this->fileSize, 1024);
-        $suffixes = ['', 'kb', 'mb', 'gb', 'tb'];
+        if ($this->fileSize == 0) {
+            $convertNum = 0;
+        } else {
+            $base = log($this->fileSize, 1024);
+            $suffixes = ['', 'kb', 'mb', 'gb', 'tb'];
+            $convertNum = round(pow(1024, $base - floor($base)), 1) .' '. $suffixes[floor($base)];
+        }
 
-        return round(pow(1024, $base - floor($base)), 1) .' '. $suffixes[floor($base)];
+        return $convertNum;
     }
 
     public function getExifData()
@@ -135,7 +148,7 @@ class UserController extends Controller
         $logTime = date("d-m-Y h:i:sa");
         $logSize = $this->convertSize();
         $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
-        if ($this->fileCode === 1) {
+        if ($this->fileCode === 1 && $logSize > 0) {
             $logCode = 'Upload successful';
             $this->model->uploadLog($logFileName, $logName, $logTime, $logSize, $logCode);
         } else {

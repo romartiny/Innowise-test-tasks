@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
+require_once __DIR__ . './../vendor/autoload.php';
+
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-require_once __DIR__ . './../vendor/autoload.php';
-
 class Controller
 {
-    public function twigResult($fileName, $fileSize, $fileExif)
+    public function twigResult($fileName, $fileSize, $fileExif, $dataFiles)
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
@@ -17,15 +17,18 @@ class Controller
         echo $twig->render('index.html.twig', [
             'name' => $fileName,
             'size' => $fileSize,
-            'exif' => $fileExif
+            'exif' => $fileExif,
+            'data' => $dataFiles
             ]);
     }
 
-    public function twigIndex()
+    public function twigIndex($dataFiles)
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
-        echo $twig->render('index.html.twig');
+        echo $twig->render('index.html.twig', [
+            'data' => $dataFiles
+        ]);
     }
 }

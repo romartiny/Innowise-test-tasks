@@ -1,7 +1,3 @@
-.container {
-
-}
-
 .body-content {
     display: block;
     margin-left: auto;
@@ -37,4 +33,12 @@
 .text-result {
     width: 30px;
     height: 30px;
+}
+
+.file__block-list {
+    float: right;
+}
+
+.file__block-item {
+    list-style-type: numbers;
 }

@@ -17,15 +17,24 @@
     <h1 class="text-center">FileUpload</h1>
     <form action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="add" required>
-        <input type="file" name="file" id="file" onchange="validateSize(this)" accept=".png, .jpg, .jpeg, .txt">
+        <input type="file" name="file" id="file" onchange="validateSize(this)" accept=".png, .jpg, .jpeg, .txt" required>
         <div class="button-block">
             <button type="submit" value="submit" class="btn btn-primary">Add</button>
         </div>
     </form>
-    <div class="results">
-        <p class="text-result">{{ name }}</p>
-        <p class="text-result">{{ size }}</p>
-        <p class="text-result">{{ exif }}</p>
+    <div class="block__results">
+        <div class="results">
+            <p class="text-result">{{ name }}</p>
+            <p class="text-result">{{ size }}</p>
+            <p class="text-result">{{ exif }}</p>
+        </div>
+        <div class="file__block">
+            <ul class="file__block-list">
+                {% for file in data %}
+                    <li class="file__block-item">{{ file }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 <script src="/Public/assets/js/main.js"></script>
