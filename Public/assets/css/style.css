@@ -1,3 +1,7 @@
+.container {
+
+}
+
 .body-content {
     display: block;
     margin-left: auto;
@@ -26,7 +30,11 @@
     margin-top: 10px;
 }
 
+.results {
+    margin-right: 0 auto;
+}
+
 .text-result {
-    width: 300px;
-    height: 300px;
+    width: 30px;
+    height: 30px;
 }

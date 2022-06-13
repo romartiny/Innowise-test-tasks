@@ -111,7 +111,8 @@ class UserController extends Controller
             } else {
                 $exif = exif_read_data($fp);
                 $exifData = json_encode($exif);
-                $this->fileExif = preg_replace('/[\"\'\{\}]/', '', $exifData);
+                $exifFix = preg_replace('/[\"\'\{\}]/', '', $exifData);
+                $this->fileExif = str_replace(',', ' ', $exifFix);
             }
         } else {
             $this->fileExif = 'No exif data';
@@ -137,17 +138,17 @@ class UserController extends Controller
     public function addLog()
     {
         $this->isFreeSpace();
-        $dateFile = date("d") . date("m") . date("Y");
+        $dateFile = date("dmY");
         $logName = $this->randomFileName;
         $logTime = date("d-m-Y h:i:sa");
         $logSize = $this->convertSize();
         $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
         if ($this->fileCode === 1) {
             $logCode = 'Upload successful';
-            $this->model->uploadGoodLog($logFileName, $logName, $logTime, $logSize, $logCode);
+            $this->model->uploadLog($logFileName, $logName, $logTime, $logSize, $logCode);
         } else {
             $logCode = 'Not upload';
-            $this->model->uploadBadLog($logFileName, $logName, $logTime, $logSize, $logCode);
+            $this->model->uploadLog($logFileName, $logName, $logTime, $logSize, $logCode);
         }
     }
 
