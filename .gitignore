@@ -1,7 +1,4 @@
 .idea
 .DS_Store
-vendor
-composer.lock
-composer.json
 upload
 logs
