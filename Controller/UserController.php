@@ -1,5 +1,11 @@
 <?php
 
+namespace App\Controller;
+
+use App\Config\Config;
+use App\UserModel\UserModel;
+use App\Controller\Controller as Controller;
+
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../Model/UserModel.php';
 require_once __DIR__ . '/../Config/Config.php';
@@ -119,20 +125,6 @@ class UserController extends Controller
         }
 
         return $this->fileExif;
-    }
-
-    public function isExecutable()
-    {
-        $path = realpath($this->fileName);
-        $file = __DIR__ . '/../' . $this->config::UPLOAD_PATH . $this->fileName;
-        if (is_executable($file)) {
-            $exCode = 1;
-        } else {
-            $exCode = 0;
-        }
-//        echo realpath($_FILES["file"]["tmp_name"]);
-        echo $exCode;
-        return $path;
     }
 
     public function addLog()

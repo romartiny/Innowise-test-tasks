@@ -1,7 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../Config/Config.php';
-require_once __DIR__ . '/../Controller/UserController.php';
+namespace App\UserModel;
+
+use App\Config\Config;
 
 class UserModel
 {
