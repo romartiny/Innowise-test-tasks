@@ -1,10 +1,9 @@
 <?php
 
-namespace App\UserController;
+namespace App\Controller;
 
-use App;
-use App\UserModel\UserModel;
-use App\Config\Config;
+use App\UserModel\UserModel as UserModel;
+use App\Config\Config as Config;
 use App\Controller\Controller as Controller;
 
 require_once __DIR__ . '/Controller.php';
