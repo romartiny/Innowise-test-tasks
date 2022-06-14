@@ -2,6 +2,7 @@
 
 namespace App\UserController;
 
+use App;
 use App\UserModel\UserModel;
 use App\Config\Config;
 use App\Controller\Controller as Controller;
