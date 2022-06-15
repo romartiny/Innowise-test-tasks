@@ -48,7 +48,6 @@ class UserController extends Controller
     public function index()
     {
         $this->checkUploadDir();
-        $this->checkLogDir();
         $dataFiles = $this->getFileList();
         if (!empty($this->fileName)) {
             $fileName = $this->fileName;
