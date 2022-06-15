@@ -48,14 +48,15 @@ class UserController extends Controller
     public function index()
     {
         $this->checkUploadDir();
+        $extends = $this->config::EXTENSION;
         $dataFiles = $this->getFileList();
         if (!empty($this->fileName)) {
             $fileName = $this->fileName;
             $fileSize = $this->fileSize;
             $fileExif = $this->fileExif;
-            $this->twigResult($fileName, $fileSize, $fileExif, $dataFiles);
+            $this->twigResult($fileName, $fileSize, $fileExif, $dataFiles, $extends);
         } else {
-            $this->twigIndex($dataFiles);
+            $this->twigIndex($dataFiles, $extends);
         }
     }
 

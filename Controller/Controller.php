@@ -9,7 +9,7 @@ use Twig\Loader\FilesystemLoader;
 
 class Controller
 {
-    public function twigResult($fileName, $fileSize, $fileExif, $dataFiles)
+    public function twigResult($fileName, $fileSize, $fileExif, $dataFiles, $extends)
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
@@ -18,17 +18,19 @@ class Controller
             'name' => $fileName,
             'size' => $fileSize,
             'exif' => $fileExif,
-            'data' => $dataFiles
+            'data' => $dataFiles,
+            'extends' => $extends
             ]);
     }
 
-    public function twigIndex($dataFiles)
+    public function twigIndex($dataFiles, $extends)
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
         echo $twig->render('index.html.twig', [
-            'data' => $dataFiles
+            'data' => $dataFiles,
+            'extends' => $extends
         ]);
     }
 }
