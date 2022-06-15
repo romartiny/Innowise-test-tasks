@@ -3,6 +3,7 @@
 namespace App\UserModel;
 
 use App\Config\Config;
+use Exception;
 
 class UserModel
 {
@@ -18,17 +19,23 @@ class UserModel
         move_uploaded_file($fileTmpName, $fileDestination);
     }
 
+    /**
+     * @throws Exception
+     */
     public function createUploadDir($dirname)
     {
         if (!mkdir($dirname, 0777) && !is_dir($dirname)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dirname));
+            throw new Exception(sprintf('Directory "%s" was not created', $dirname));
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function createLogDir($dirname)
     {
         if (!mkdir($dirname, 0777) && !is_dir($dirname)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dirname));
+            throw new Exception(sprintf('Directory "%s" was not created', $dirname));
         }
     }
 
