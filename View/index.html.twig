@@ -17,10 +17,7 @@
     <h1 class="text-center">FileUpload</h1>
     <form action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="add" required>
-        <input type="file" name="file" id="file" onchange="validateSize(this)" accept="
-    {% for extend in extends %}
-       .{{ extend }},
-    {% endfor %}" required>
+        <input type="file" name="file" id="file" onchange="validateSize(this)" accept="{{ extends }}" required>
         <div class="button-block">
             <button type="submit" value="submit" class="btn btn-primary">Add</button>
         </div>

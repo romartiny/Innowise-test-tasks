@@ -48,7 +48,7 @@ class UserController extends Controller
     public function index()
     {
         $this->checkUploadDir();
-        $extends = $this->config::EXTENSION;
+        $extends = $this->getExtension();
         $dataFiles = $this->getFileList();
         if (!empty($this->fileName)) {
             $fileName = $this->fileName;
@@ -68,6 +68,12 @@ class UserController extends Controller
         $this->fileSize = $_FILES['file']['size'];
         $this->fileError = $_FILES['file']['error'];
         $this->fileType = $_FILES['file']['type'];
+    }
+
+    public function getExtension()
+    {
+        $currentExt = $this->config::EXTENSION;
+        return implode(', .', $currentExt);
     }
 
     public function checkUploadDir()
@@ -150,11 +156,10 @@ class UserController extends Controller
         $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
         if ($this->fileCode === 1 && $logSize > 0) {
             $logCode = 'Upload successful';
-            $this->model->uploadLog($logFileName, $logName, $logTime, $logSize, $logCode);
         } else {
             $logCode = 'Not upload';
-            $this->model->uploadLog($logFileName, $logName, $logTime, $logSize, $logCode);
         }
+        $this->model->uploadLog($logFileName, $logName, $logTime, $logSize, $logCode);
     }
 
     public function uploadData()
