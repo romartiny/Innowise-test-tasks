@@ -9,28 +9,21 @@ use Twig\Loader\FilesystemLoader;
 
 class Controller
 {
-    public function twigResult($fileName, $fileSize, $fileExif, $dataFiles, $extends)
+    public function twigIndex()
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
-        echo $twig->render('index.html.twig', [
-            'name' => $fileName,
-            'size' => $fileSize,
-            'exif' => $fileExif,
-            'data' => $dataFiles,
-            'extends' => $extends
-            ]);
+        echo $twig->render('login.html.twig');
     }
 
-    public function twigIndex($dataFiles, $extends)
+    public function twigResult($answer)
     {
-        $loader = new FilesystemLoader(__DIR__ . '/../View');
-        $twig = new Environment($loader);
+    $loader = new FilesystemLoader(__DIR__ . '/../View');
+    $twig = new Environment($loader);
 
-        echo $twig->render('index.html.twig', [
-            'data' => $dataFiles,
-            'extends' => $extends
-        ]);
-    }
+    echo $twig->render('login.html.twig', [
+        'answer' => $answer
+    ]);
+}
 }

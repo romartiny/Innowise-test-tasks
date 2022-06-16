@@ -2,52 +2,32 @@
 
 namespace App\UserModel;
 
-use App\Config\Config;
-use Exception;
+require_once __DIR__ . '/../Config/Database.php';
+
+use App\Controller\UserController as UserController;
+use App\Database\Database;
 
 class UserModel
 {
-    public Config $config;
+    public UserController $controller;
+    public Database $database;
 
     public function __construct()
     {
-        $this->config = new Config();
+        $this->database = new Database();
     }
-
-    public function uploadFile($fileTmpName, $fileDestination)
+    public function isCorrect($email, $password)
     {
-        move_uploaded_file($fileTmpName, $fileDestination);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function createUploadDir($dirname)
-    {
-        if (!mkdir($dirname, 0777) && !is_dir($dirname)) {
-            throw new Exception(sprintf('Directory "%s" was not created', $dirname));
+        $conf = $this->database->getDatabase();
+        foreach ($conf as $key => $value) {
+            if ($key === $email) {
+                foreach ($value as $sub_key => $sub_val) {
+                    if ($sub_key === 'password') {
+                        return password_verify(123456, '$sub_val');
+                    }
+                }
+            }
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function createLogDir($dirname)
-    {
-        if (!mkdir($dirname, 0777) && !is_dir($dirname)) {
-            throw new Exception(sprintf('Directory "%s" was not created', $dirname));
-        }
-    }
-
-    public function uploadLog($logFileName, $logName, $logTime, $logSize, $logCode)
-    {
-        $logFile = fopen($logFileName, "a");
-        $log = "| $logTime | $logName | $logSize | $logCode\n";
-        fwrite($logFile, $log);
-    }
-
-    public function openImage($uploadPath, $fileName)
-    {
-        return fopen(__DIR__ . "/../" . $uploadPath . $fileName, 'rb');
+        return null;
     }
 }
