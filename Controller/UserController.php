@@ -46,11 +46,11 @@ class UserController extends Controller
         $email = $this->email;
         $password = $this->password;
         $answer = $this->model->isCorrect($email, $password);
-//        if ($answer === 1) {
-//            $answer = 'Login Done';
-//        } else {
-//            $answer = 'Login is incorrect.';
-//        }
+        if ($answer === 1) {
+            $answer = 'Login Done';
+        } else {
+            $answer = 'Login is incorrect.';
+        }
         $this->twigResult($answer);
     }
 }
