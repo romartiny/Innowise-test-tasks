@@ -37,7 +37,7 @@ class UserController extends Controller
     public function getData()
     {
         $this->email = $_POST['email'];
-        $this->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $this->password = $_POST['password'];
     }
 
     public function login()
