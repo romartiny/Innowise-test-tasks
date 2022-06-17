@@ -29,10 +29,10 @@ class UserController extends Controller
      */
     public function init(): void
     {
-        if (!isset($_REQUEST['action'])) {
+        if (!isset($_POST['action'])) {
             $this->index();
         } else {
-            $action = $_REQUEST['action'];
+            $action = $_POST['action'];
             $this->$action();
         }
     }
@@ -63,7 +63,7 @@ class UserController extends Controller
         $this->getData();
         $email = $this->email;
         $password = $this->password;
-        $answer = $this->model->isCorrect($email, $password);
+        $answer = $this->model->getUserLogin($email, $password);
         if (!empty($answer)) {
             $answer = 'Welcome back, ' . $answer;
         } else {

@@ -4,7 +4,7 @@ namespace App\Credentials;
 
 class Credentials
 {
-    public function getDatabase(): array
+    public function getCredentials(): array
     {
         return [
             'user1@test.com' => [

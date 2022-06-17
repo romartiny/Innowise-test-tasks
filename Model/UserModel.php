@@ -14,14 +14,14 @@ class UserModel
     {
         $this->database = new Credentials();
     }
-    public function isCorrect($email, $password): ?string
+    public function getUserLogin($email, $password): ?string
     {
-        $conf = $this->database->getDatabase();
+        $conf = $this->database->getCredentials();
         foreach ($conf as $key => $value) {
             if ($key === $email && password_verify($password, $value['password'])) {
                 return $value['name'];
-    }
-}
+            }
+        }
         return null;
     }
 }
