@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Database;
+namespace App\Credentials;
 
-class Database
+class Credentials
 {
     public function getDatabase(): array
     {

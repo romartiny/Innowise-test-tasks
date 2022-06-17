@@ -2,32 +2,26 @@
 
 namespace App\UserModel;
 
-require_once __DIR__ . '/../Config/Database.php';
+require_once __DIR__ . '/../Config/Credentials.php';
 
-use App\Controller\UserController as UserController;
-use App\Database\Database;
+use App\Credentials\Credentials;
 
 class UserModel
 {
-    public UserController $controller;
-    public Database $database;
+    public Credentials $database;
 
     public function __construct()
     {
-        $this->database = new Database();
+        $this->database = new Credentials();
     }
-    public function isCorrect($email, $password): ?bool
+    public function isCorrect($email, $password): ?string
     {
         $conf = $this->database->getDatabase();
         foreach ($conf as $key => $value) {
-            if ($key === $email) {
-                foreach ($value as $sub_key => $sub_val) {
-                    if ($sub_key === 'password') {
-                        return password_verify($password, '$sub_val');
-                    }
-                }
-            }
-        }
+            if ($key === $email && password_verify($password, $value['password'])) {
+                return $value['name'];
+    }
+}
         return null;
     }
 }
