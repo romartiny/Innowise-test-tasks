@@ -13,8 +13,13 @@ require_once __DIR__ . '/../Model/UserModel.php';
 
 class UserController extends Controller
 {
+    public string $firstName;
+    public string $lastName;
     public string $email;
+    public string $confEmail;
     public string $password;
+    public string $confPassword;
+
     public UserModel $model;
 
     public function __construct()
@@ -47,10 +52,47 @@ class UserController extends Controller
         $this->twigIndex();
     }
 
-    public function getData()
+    public function getData() // get data
     {
+        $this->firstName = $_POST['first-name'];
+        $this->lastName = $_POST['last-name'];
         $this->email = $_POST['email'];
+        $this->confEmail = $_POST['conf-email'];
         $this->password = $_POST['password'];
+        $this->confPassword = $_POST['conf-password'];
+    }
+
+    public function isSame(): bool // check email and password is same
+    {
+        if ($this->email === $this->confEmail && $this->password === $this->confPassword) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkPassword(): bool // check regex password
+    {
+        $regex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&]).*$/';
+        if (strlen($this->password) >= 6 && preg_match($regex, $this->password)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function cryptPassword(): string // crypt password
+    {
+        return $this->password = md5($this->password);
+    }
+
+    public function addUser()
+    {
+        $email = $this->email;
+        $firstName = $this->firstName;
+        $lastName = $this->lastName;
+        $password = $this->password;
+        $this->model->addUser($email, $firstName, $lastName, $password);
     }
 
     /**
@@ -58,17 +100,21 @@ class UserController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function login()
+    public function register() // main func reg
     {
         $this->getData();
-        $email = $this->email;
-        $password = $this->password;
-        $answer = $this->model->getUserLogin($email, $password);
-        if (!empty($answer)) {
-            $answer = 'Welcome back, ' . $answer;
+        if ($this->isSame() === true) {
+            if ($this->checkPassword() === true) {
+                $this->cryptPassword();
+                $this->addUser();
+                $answer = 'Create Successfully';
+            } else {
+                $answer = 'Your password dont fit the rules';
+            }
         } else {
-            $answer = 'Login is incorrect.';
+            $answer = 'Your passwords is not the same';
         }
         $this->twigResult($answer);
     }
+
 }

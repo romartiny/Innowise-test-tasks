@@ -2,26 +2,28 @@
 
 namespace App\UserModel;
 
-require_once __DIR__ . '/../Config/Credentials.php';
+require_once __DIR__ . '/../Config/DatabaseConfig.php';
 
-use App\Credentials\Credentials;
+use App\DatabaseConfig\DatabaseConfig;
+use Exception;
 
 class UserModel
 {
-    public Credentials $database;
+    public DatabaseConfig $connect;
 
     public function __construct()
     {
-        $this->database = new Credentials();
+        return $this->connect = new DatabaseConfig();
     }
-    public function getUserLogin($email, $password): ?string
+
+    public function addUser($email, $firstName, $lastName, $password): void
     {
-        $conf = $this->database->getCredentials();
-        foreach ($conf as $key => $value) {
-            if ($key === $email && password_verify($password, $value['password'])) {
-                return $value['name'];
-            }
+        try {
+            $query = "INSERT into users (email, first_name, last_name, password) VALUES (?,?,?,?)";
+            $this->connect->prepare($query)->execute(array($email, $firstName, $lastName, $password));
+        } catch (Exception $exception) {
+            die($exception->getMessage());
         }
-        return null;
     }
+
 }

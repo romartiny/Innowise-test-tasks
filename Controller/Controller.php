@@ -32,11 +32,11 @@ class Controller
      */
     public function twigResult($answer)
     {
-    $loader = new FilesystemLoader(__DIR__ . '/../View');
-    $twig = new Environment($loader);
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
 
-    echo $twig->render('login.html.twig', [
-        'answer' => $answer
-    ]);
-}
+        echo $twig->render('login.html.twig', [
+            'answer' => $answer
+        ]);
+    }
 }
