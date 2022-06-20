@@ -4,6 +4,10 @@
     position: relative;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .register .title {
   text-align: center;
   text-transform: uppercase;
