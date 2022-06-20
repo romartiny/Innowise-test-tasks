@@ -2,7 +2,6 @@
     "require": {
         "twig/twig": "^3.0",
       "ext-exif": "*",
-      "ext-json": "*",
-      "ext-pdo": "*"
+      "ext-json": "*"
     }
 }
