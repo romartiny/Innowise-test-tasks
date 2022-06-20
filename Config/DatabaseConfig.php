@@ -8,8 +8,7 @@ class DatabaseConfig
     public string $hostname = 'root';
     public string $hostpass = 'root';
     public string $dbname = 'usermove';
-    public string $tableName = 'users';
-    protected $conn = null;
+    protected ?\PDO $conn = null;
 
     public function __construct()
     {
