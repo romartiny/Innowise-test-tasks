@@ -19,7 +19,7 @@ class UserModel
     public function addUser($email, $firstName, $lastName, $password): void
     {
         try {
-            $query = "INSERT into users (email, first_name, last_name, password) VALUES (?,?,?,?)";
+            $query = 'INSERT INTO users (email, first_name, last_name, password) VALUES (?,?,?,?)';
             $this->connect->prepare($query)->execute(array($email, $firstName, $lastName, $password));
         } catch (Exception $exception) {
             die($exception->getMessage());
