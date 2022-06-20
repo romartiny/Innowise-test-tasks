@@ -1,10 +1,10 @@
 # innowise-test-tasks
-php test tasks
+php test tasks<br>
 
-version php: 7.4.21
+composer install <br>
+run via mamp <br>
+ip: localhost - 
+port: 8888
 
-run from command line: 
+database change in DatabaseConfig.php
 
-composer install
-
-php -S 127.0.0.1:8000
