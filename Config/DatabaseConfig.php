@@ -17,7 +17,6 @@ class DatabaseConfig
         } catch(\PDOException $exception) {
             echo "Connection failed: " . $exception->getMessage();
         }
-        return $this->conn;
     }
 
     public function prepare($query)

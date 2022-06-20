@@ -13,7 +13,7 @@ class UserModel
 
     public function __construct()
     {
-        return $this->connect = new DatabaseConfig();
+        $this->connect = new DatabaseConfig();
     }
 
     public function addUser($email, $firstName, $lastName, $password): void
