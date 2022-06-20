@@ -52,7 +52,7 @@ class UserController extends Controller
         $this->twigIndex();
     }
 
-    public function getData() // get data
+    public function getData()
     {
         $this->firstName = $_POST['first-name'];
         $this->lastName = $_POST['last-name'];
@@ -62,7 +62,7 @@ class UserController extends Controller
         $this->confPassword = $_POST['conf-password'];
     }
 
-    public function isSame(): bool // check email and password is same
+    public function isSame(): bool
     {
         if ($this->email === $this->confEmail && $this->password === $this->confPassword) {
             return true;
@@ -71,7 +71,7 @@ class UserController extends Controller
         }
     }
 
-    public function checkPassword(): bool // check regex password
+    public function checkPassword(): bool
     {
         $regex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&]).*$/';
         if (strlen($this->password) >= 6 && preg_match($regex, $this->password)) {
@@ -81,7 +81,7 @@ class UserController extends Controller
         return false;
     }
 
-    public function cryptPassword(): string // crypt password
+    public function cryptPassword(): string
     {
         return $this->password = md5($this->password);
     }
@@ -100,7 +100,7 @@ class UserController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function register() // main func reg
+    public function register()
     {
         $this->getData();
         if ($this->isSame() === true) {
