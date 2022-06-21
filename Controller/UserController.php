@@ -132,10 +132,8 @@ class UserController extends Controller
     {
         $this->getLoginData();
         $email = $this->email;
-        $password = $this->password;
-        $res = $this->model->checkUser($email, $password);
-        echo $res;
-        if ($res > 0) {
+        $password = md5($this->password);
+        if ($this->model->checkUser($email, $password) > 0) {
             echo "Login True";
         } else {
             echo "Login False";
