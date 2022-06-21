@@ -134,16 +134,11 @@ class UserController extends Controller
         $email = $this->email;
         $password = $this->password;
         $res = $this->model->checkUser($email, $password);
-        print_r($res);
+        echo $res;
         if ($res > 0) {
-            echo $email;
-            echo $password;
-            echo 'fsasfa';
-            print_r($this->model->checkUser($email, $password));
+            echo "Login True";
         } else {
-            echo $email;
-            echo $password;
-            echo count([$this->model->checkUser($email, $password)]);
+            echo "Login False";
         }
     }
 }
