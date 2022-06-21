@@ -35,8 +35,16 @@ class Controller
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
-        echo $twig->render('login.html.twig', [
+        echo $twig->render('register.html.twig', [
             'answer' => $answer
         ]);
+    }
+
+    public function twigRegister()
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        echo $twig->render('register.html.twig');
     }
 }

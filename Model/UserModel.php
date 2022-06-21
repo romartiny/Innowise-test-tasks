@@ -25,4 +25,19 @@ class UserModel
         }
     }
 
+    public function checkUser($email, $password)
+    {
+        try {
+//            $query = "SELECT * FROM users WHERE email=:email AND password=:password";
+            $query = 'SELECT * FROM users';
+//            $this->connect->prepare($query);
+//            $this->connect->prepare($query)->execute(array(':email' => $email, ':password' => $password));
+            $count = $this->connect->prepare($query)->rowCount();
+            $this->connect->prepare($query)->fetch();
+        } catch (\Exception $exception) {
+            die($exception->getMessage());
+        }
+        return $count;
+    }
+
 }

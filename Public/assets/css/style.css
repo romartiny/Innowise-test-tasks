@@ -81,6 +81,10 @@
     cursor: pointer;
 }
 
+.back-pic {
+    width: 24px;
+}
+
 .submit-btn {
     float: right;
 }
@@ -101,6 +105,11 @@
     list-style: circle;
 }
 
-.help-point {
+.login-btn {
+    text-align: center;
+}
 
+.reg-link {
+    float: left;
+    text-align: center;
 }

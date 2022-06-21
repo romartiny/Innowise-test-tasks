@@ -34,10 +34,10 @@ class UserController extends Controller
      */
     public function init(): void
     {
-        if (!isset($_POST['action'])) {
+        if (!isset($_REQUEST['action'])) {
             $this->index();
         } else {
-            $action = $_POST['action'];
+            $action = $_REQUEST['action'];
             $this->$action();
         }
     }
@@ -52,7 +52,12 @@ class UserController extends Controller
         $this->twigIndex();
     }
 
-    public function getData()
+    public function registerForm()
+    {
+        $this->twigRegister();
+    }
+
+    public function getRegisterData()
     {
         $this->firstName = $_POST['first-name'];
         $this->lastName = $_POST['last-name'];
@@ -102,12 +107,12 @@ class UserController extends Controller
      */
     public function register()
     {
-        $this->getData();
+        $this->getRegisterData();
         if ($this->isSame() === true) {
             if ($this->checkPassword() === true) {
                 $this->cryptPassword();
                 $this->addUser();
-                $answer = 'Create Successfully';
+                $answer = 'Created Successfully';
             } else {
                 $answer = 'Your password dont fit the rules';
             }
@@ -117,4 +122,28 @@ class UserController extends Controller
         $this->twigResult($answer);
     }
 
+    public function getLoginData()
+    {
+        $this->email = $_POST['email'];
+        $this->password = $_POST['password'];
+    }
+
+    public function login()
+    {
+        $this->getLoginData();
+        $email = $this->email;
+        $password = $this->password;
+        $res = $this->model->checkUser($email, $password);
+        print_r($res);
+        if ($res > 0) {
+            echo $email;
+            echo $password;
+            echo 'fsasfa';
+            print_r($this->model->checkUser($email, $password));
+        } else {
+            echo $email;
+            echo $password;
+            echo count([$this->model->checkUser($email, $password)]);
+        }
+    }
 }
