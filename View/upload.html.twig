@@ -11,16 +11,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/3a2eaf6206.js"></script>
 </head>
 <body>
 <div class="container">
+    <a href="index.php?action=logout" class="logout-link">Logout</a>
     <h1 class="text-center">FileUpload</h1>
-    <a href="index.php?action=logout">Logout</a>
     <form action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="add" required>
-        <input type="file" name="file" id="file" onchange="validateSize(this)" accept="{{ extends }}" required>
-        <div class="button-block">
-            <button type="submit" value="submit" class="btn btn-primary">Add</button>
+        <div class="block-send">
+            <label class="label-file" for="file">
+                <i class="fa fa-2x fa-camera"></i>
+                <input class="input-file" type="file" name="file" id="file" onchange="validateSize(this)" accept="{{ extends }}" required>
+            </label>
+            <div class="button-block">
+                <button type="submit" value="submit" class="btn btn-primary">Add</button>
+            </div>
         </div>
     </form>
     <div class="block__results">

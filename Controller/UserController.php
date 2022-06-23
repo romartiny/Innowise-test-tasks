@@ -66,7 +66,6 @@ class UserController extends Controller
             $extends = $this->getExtension();
             $dataFiles = $this->getFileList();
             $this->twigFile($dataFiles, $extends);
-            echo $_SESSION['email'];
         } else {
             $this->twigIndex();
         }
@@ -131,6 +130,14 @@ class UserController extends Controller
         $this->model->addUser($email, $firstName, $lastName, $password);
     }
 
+    public function initSession()
+    {
+        $_SESSION['firstName'] = $this->firstName;
+        $_SESSION['lastName'] = $this->lastName;
+        $_SESSION['email'] = $this->email;
+        $_SESSION['confEmail'] = $this->confEmail;
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -139,10 +146,7 @@ class UserController extends Controller
     public function register()
     {
         $this->getRegisterData();
-        $_SESSION['firstName'] = $this->firstName;
-        $_SESSION['lastName'] = $this->lastName;
-        $_SESSION['email'] = $this->email;
-        $_SESSION['confEmail'] = $this->confEmail;
+        $this->initSession();
         $firstNameSession = $_SESSION['firstName'];
         $lastNameSession = $_SESSION['lastName'];
         $emailSession = $_SESSION['email'];
@@ -192,9 +196,7 @@ class UserController extends Controller
             }
         }
     }
-
-    //FILES
-
+    
     public function getFileList()
     {
         return array_diff(scandir($this->config::UPLOAD_PATH), array('.', '..'));
@@ -277,7 +279,7 @@ class UserController extends Controller
         } else {
             $base = log($this->fileSize, 1024);
             $suffixes = ['', 'kb', 'mb', 'gb', 'tb'];
-            $convertNum = round(pow(1024, $base - floor($base)), 1) .' '. $suffixes[floor($base)];
+            $convertNum = round(pow(1024, $base - floor($base)), 1) . ' ' . $suffixes[floor($base)];
         }
 
         return $convertNum;
@@ -332,7 +334,7 @@ class UserController extends Controller
         $fileActualExt = strtolower(end($fileExt));
         $this->randomFileName = uniqid('', true) . '.' . $fileActualExt;
         $fileDestination = $this->config::UPLOAD_PATH . $this->randomFileName;
-        if(in_array($fileActualExt, $this->config::EXTENSION)) {
+        if (in_array($fileActualExt, $this->config::EXTENSION)) {
             if ($this->fileError === 0) {
                 $this->fileCode = 1;
                 $this->model->uploadFile($this->fileTmpName, $fileDestination);
