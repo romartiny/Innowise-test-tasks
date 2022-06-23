@@ -22,21 +22,22 @@
         <div class="form-field col-lg-12">
             <label for="first-name" class="hidden"></label>
             <input type="text" class="input-text js-input" id="first-name" name="first-name" placeholder="First Name"
-                   required>
+                   value="{{ firstName }}" required>
         </div>
         <div class="form-field col-lg-12">
             <label for="last-name" class="hidden"></label>
             <input type="text" class="input-text js-input" id="last-name" name="last-name" placeholder="Last Name"
-                   required>
+                   value="{{ lastName }}" required>
         </div>
         <div class="form-field col-lg-12">
             <label for="first-email" class="hidden"></label>
-            <input type="email" class="input-text js-input" id="first-email" name="email" placeholder="Email" required>
+            <input type="email" class="input-text js-input" id="first-email" name="email" placeholder="Email"
+                   value="{{ email }}" required>
         </div>
         <div class="form-field col-lg-12">
             <label for="confirm-email" class="hidden"></label>
             <input type="email" class="input-text js-input" id="confirm-email" name="conf-email"
-                   placeholder="Confirm Email" required>
+                   placeholder="Confirm Email"  value="{{ confEmail }}" required>
         </div>
         <div class="form-field col-lg-12">
             <label for="password" class="hidden"></label>

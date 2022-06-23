@@ -13,12 +13,12 @@
 <body>
 <section class="register">
     <h1 class="title">Login</h1>
-    <p class="text-center">{{ answer }}</p>
+    <p class="text-center">{{ result }}</p>
     <form action="index.php" method="post" class="contact-form row">
         <input type="hidden" name="action" value="login">
         <div class="form-field col-lg-12">
             <label for="first-email" class="hidden"></label>
-            <input type="email" class="input-text js-input" id="first-email" name="email" placeholder="Email" required>
+            <input type="email" class="input-text js-input" id="first-email" name="email" placeholder="Email" value="{{ emailSession }}" required>
         </div>
         <div class="form-field col-lg-12">
             <label for="password" class="hidden"></label>

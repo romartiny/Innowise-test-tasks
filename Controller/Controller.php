@@ -12,6 +12,7 @@ use Twig\Loader\FilesystemLoader;
 
 class Controller
 {
+    //LOGIN
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -26,19 +27,22 @@ class Controller
     }
 
     /**
-     * @throws RuntimeError
      * @throws SyntaxError
+     * @throws RuntimeError
      * @throws LoaderError
      */
-    public function twigResult($answer)
+    public function twigLoginResult($result, $emailSession)
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
-        echo $twig->render('register.html.twig', [
-            'answer' => $answer
+        echo $twig->render('login.html.twig', [
+            'result' => $result,
+            'emailSession' => $emailSession
         ]);
     }
+
+    //REGISTER
 
     public function twigRegister()
     {
@@ -46,5 +50,51 @@ class Controller
         $twig = new Environment($loader);
 
         echo $twig->render('register.html.twig');
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function twigRegisterResult($answer, $firstNameSession, $lastNameSession, $emailSession, $confEmailSession)
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        echo $twig->render('register.html.twig', [
+            'answer' => $answer,
+            'firstName' => $firstNameSession,
+            'lastName' => $lastNameSession,
+            'email' => $emailSession,
+            'confEmail' => $confEmailSession
+        ]);
+    }
+
+    //DATA
+
+    public function twigFileResult($fileName, $fileSize, $fileExif, $dataFiles, $extends)
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        echo $twig->render('upload.html.twig', [
+            'name' => $fileName,
+            'size' => $fileSize,
+            'exif' => $fileExif,
+            'data' => $dataFiles,
+            'extends' => $extends
+        ]);
+    }
+
+    public function twigFile($dataFiles, $extends)
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        echo $twig->render('upload.html.twig', [
+            'data' => $dataFiles,
+            'extends' => $extends
+        ]);
     }
 }
