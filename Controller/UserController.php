@@ -30,6 +30,7 @@ class UserController extends Controller
     public int $fileCode;
     public string $fileExif;
     public string $fileType;
+    public string $session;
     public UserModel $model;
     public Config $config;
 
@@ -55,13 +56,31 @@ class UserController extends Controller
     }
 
     /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function sessionCheck()
+    {
+        if (!empty($_SESSION['email'])) {
+            $extends = $this->getExtension();
+            $dataFiles = $this->getFileList();
+            $this->twigFile($dataFiles, $extends);
+            echo $_SESSION['email'];
+        } else {
+            $this->twigIndex();
+        }
+    }
+
+    /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
      */
     public function index()
     {
-        $this->twigIndex();
+        $this->sessionStart();
+        $this->sessionCheck();
     }
 
     public function registerForm()
@@ -119,7 +138,6 @@ class UserController extends Controller
      */
     public function register()
     {
-        $this->sessionStart();
         $this->getRegisterData();
         $_SESSION['firstName'] = $this->firstName;
         $_SESSION['lastName'] = $this->lastName;
@@ -160,14 +178,18 @@ class UserController extends Controller
         $this->sessionStart();
         $this->getLoginData();
         $_SESSION['email'] = $this->email;
-        $emailSession = $_SESSION['email'];
-        $email = $this->email;
-        $password = md5($this->password);
-        if ($this->model->checkUser($email, $password) > 0) {
+        if (empty($_SESSION['email'])) {
             $this->addFile();
         } else {
-            $result = "Account not found or password was wrong";
-            $this->twigLoginResult($result, $emailSession);
+            $emailSession = $_SESSION['email'];
+            $email = $this->email;
+            $password = md5($this->password);
+            if ($this->model->checkUser($email, $password) > 0) {
+                $this->addFile();
+            } else {
+                $result = "Account not found or password was wrong";
+                $this->twigLoginResult($result, $emailSession);
+            }
         }
     }
 
@@ -338,5 +360,19 @@ class UserController extends Controller
     public function sessionStart()
     {
         session_start();
+        $this->session = true;
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function logout()
+    {
+        session_start();
+        session_destroy();
+        $this->session = false;
+        $this->index();
     }
 }
