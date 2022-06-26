@@ -239,7 +239,7 @@ class UserController extends Controller
         $_SESSION['email'] = $this->email;
         if ($_SESSION['attempt'] === 3) { //
             if ($this->model->checkIpAttempts($this->ipAttempts()) > 0) {
-                $result = 'Your ip was banned for 15 minutes';
+                $result = 'Your ip was banned for 15 minutes. Be inactive this time.';
                 $this->twigLoginResult($result, $_SESSION['email']);
             }
         } else {
