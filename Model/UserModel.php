@@ -79,4 +79,47 @@ class UserModel
     {
         return fopen(__DIR__ . "/../" . $uploadPath . $fileName, 'rb');
     }
+
+    public function addIpAttempt($ip, $email)
+    {
+        try {
+            $timeEnd = date('Y-m-d H:i:s', time() + 10);
+            $query = 'INSERT INTO attempts (ip, email, time_end) VALUES (?,?,?)';
+            $this->connect->prepare($query)->execute(array($ip, $email, $timeEnd));
+        } catch (\Exception $exception) {
+            die($exception->getMessage());
+        }
+    }
+
+    public function checkIpAttempts($userIp)
+    {
+        try {
+            $this->checkAttemptTime();
+            $query = "SELECT * FROM attempts WHERE ip=$userIp";
+            $res = $this->connect->prepare($query);
+            $res->execute();
+            $count = $res->rowCount();
+        } catch (\Exception $exception) {
+            die($exception->getMessage());
+        }
+        return $count;
+    }
+
+    public function checkAttemptTime()
+    {
+        try {
+            $query = "DELETE FROM attempts WHERE time_end < NOW()";
+            $res = $this->connect->prepare($query);
+            $res->execute();
+        } catch (\Exception $exception) {
+            die($exception->getMessage());
+        }
+    }
+
+    public function uploadIpLog($logFileName, $ip, $email, $startDate, $endDate)
+    {
+        $logFile = fopen($logFileName, "a");
+        $log = "| $ip | $email | $startDate | $endDate\n";
+        fwrite($logFile, $log);
+    }
 }

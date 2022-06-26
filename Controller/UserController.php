@@ -62,12 +62,38 @@ class UserController extends Controller
      */
     public function sessionCheck()
     {
-        if (!empty($_SESSION['email'])) {
+        if (!isset($_SESSION['login'])) {
+            $_SESSION['login'] = 0;
+        }
+        if (!empty($_SESSION['email']) && $_SESSION['login'] === 1) {
             $extends = $this->getExtension();
             $dataFiles = $this->getFileList();
             $this->twigFile($dataFiles, $extends);
         } else {
             $this->twigIndex();
+        }
+    }
+
+    public function attemptsInit()
+    {
+        $this->model->checkAttemptTime();
+        if (!isset($_SESSION['attempt'])) {
+            $_SESSION['attempt'] = 0;
+            $_SESSION['attempt_again'] = 1;
+        }
+        if ($_SESSION['attempt_again'] < time() && $_SESSION['attempt'] === 3) {
+            $_SESSION['attempt'] = 0;
+            $this->model->checkAttemptTime();
+        } else {
+            $_SESSION['attempt_again'] = time() + (1 * 60);
+            if (!isset($_SESSION['email'])) {
+                $_SESSION['email'] = 'undefined';
+            }
+            $dateFile = date("dmY");
+            $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
+            $this->model->addIpAttempt($this->getIpAddress(), $_SESSION['email']);
+            $this->model->uploadIpLog($logFileName, $this->getIpAddress(),
+                $_SESSION['email'], date('Y-m-d H:i:s'), date('Y-m-d H:i:s', time() + 15 * 60));
         }
     }
 
@@ -80,6 +106,7 @@ class UserController extends Controller
     {
         $this->sessionStart();
         $this->sessionCheck();
+        $this->attemptsInit();
     }
 
     public function registerForm()
@@ -138,31 +165,57 @@ class UserController extends Controller
         $_SESSION['confEmail'] = $this->confEmail;
     }
 
+    public function getIpAddress()
+    {
+        if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
+    }
+
+    public function ipAttempts()
+    {
+        return $this->model->checkIpAttempts($this->getIpAddress());
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws Exception
      */
     public function register()
     {
+        $this->sessionStart();
         $this->getRegisterData();
         $this->initSession();
-        $firstNameSession = $_SESSION['firstName'];
-        $lastNameSession = $_SESSION['lastName'];
-        $emailSession = $_SESSION['email'];
-        $confEmailSession = $_SESSION['confEmail'];
         if ($this->isSame() === true) {
             if ($this->checkPassword() === true) {
-                $this->cryptPassword();
-                $this->addUser();
-                $answer = 'Created Successfully';
+                if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
+                    $answer = 'This email already use';
+                    $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                        $_SESSION['email'], $_SESSION['confEmail']);
+                } else {
+                    $this->cryptPassword();
+                    $this->addUser();
+                    $_SESSION['login'] = 1;
+                    $this->addFile();
+                }
             } else {
                 $answer = 'Your password dont fit the rules';
+                $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                    $_SESSION['email'], $_SESSION['confEmail']);
             }
         } else {
             $answer = 'Your passwords is not the same';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'], $_SESSION['email'],
+                $_SESSION['confEmail']);
         }
-        $this->twigRegisterResult($answer, $firstNameSession, $lastNameSession, $emailSession, $confEmailSession);
     }
 
     public function getLoginData()
@@ -181,22 +234,27 @@ class UserController extends Controller
     {
         $this->sessionStart();
         $this->getLoginData();
+        $this->attemptsInit();
+        $this->setCookie();
         $_SESSION['email'] = $this->email;
-        if (empty($_SESSION['email'])) {
-            $this->addFile();
+        if ($_SESSION['attempt'] === 3) { //
+            if ($this->model->checkIpAttempts($this->ipAttempts()) > 0) {
+                $result = 'Your ip was banned for 15 minutes';
+                $this->twigLoginResult($result, $_SESSION['email']);
+            }
         } else {
-            $emailSession = $_SESSION['email'];
-            $email = $this->email;
-            $password = md5($this->password);
-            if ($this->model->checkUser($email, $password) > 0) {
+            if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
+                $_SESSION['login'] = 1;
                 $this->addFile();
             } else {
+                $_SESSION['login'] = 0;
+                $_SESSION['attempt'] += 1;
                 $result = "Account not found or password was wrong";
-                $this->twigLoginResult($result, $emailSession);
+                $this->twigLoginResult($result, $_SESSION['email']);
             }
         }
     }
-    
+
     public function getFileList()
     {
         return array_diff(scandir($this->config::UPLOAD_PATH), array('.', '..'));
@@ -376,5 +434,12 @@ class UserController extends Controller
         session_destroy();
         $this->session = false;
         $this->index();
+    }
+
+    public function setCookie()
+    {
+        $cookieEmail = $this->email;
+        $secondsInDay = 86400;
+        setcookie($cookieEmail, time() + ($secondsInDay * 7), "/");
     }
 }

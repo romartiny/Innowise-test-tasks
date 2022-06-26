@@ -31,14 +31,14 @@ class Controller
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function twigLoginResult($result, $emailSession)
+    public function twigLoginResult($result, $sessionEmail)
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
         echo $twig->render('login.html.twig', [
             'result' => $result,
-            'emailSession' => $emailSession
+            'emailSession' => $sessionEmail
         ]);
     }
 
