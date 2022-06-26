@@ -83,7 +83,7 @@ class UserModel
     public function addIpAttempt($ip, $email)
     {
         try {
-            $timeEnd = date('Y-m-d H:i:s', time() + 10);
+            $timeEnd = date('Y-m-d H:i:s', time() + 15 * 60);
             $query = 'INSERT INTO attempts (ip, email, time_end) VALUES (?,?,?)';
             $this->connect->prepare($query)->execute(array($ip, $email, $timeEnd));
         } catch (\Exception $exception) {

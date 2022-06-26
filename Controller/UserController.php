@@ -85,7 +85,7 @@ class UserController extends Controller
             $_SESSION['attempt'] = 0;
             $this->model->checkAttemptTime();
         } else {
-            $_SESSION['attempt_again'] = time() + (1 * 60);
+            $_SESSION['attempt_again'] = time() + (15 * 60);
             if (!isset($_SESSION['email'])) {
                 $_SESSION['email'] = 'undefined';
             }
