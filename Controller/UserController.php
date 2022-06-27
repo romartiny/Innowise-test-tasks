@@ -132,7 +132,7 @@ class UserController extends Controller
     public function checkPassword(): bool
     {
         $regex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&]).*$/';
-        if (strlen($this->password) >= 6 && preg_match($regex, $this->password)) {
+        if (preg_match($regex, $this->password)) {
             return true;
         }
 
@@ -159,7 +159,7 @@ class UserController extends Controller
 
     public function getIpAddress()
     {
-        if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -188,18 +188,25 @@ class UserController extends Controller
         $this->initSession();
         if ($this->isSame() === true) {
             if ($this->checkPassword() === true) {
-                if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
-                    $answer = 'This email already use';
+                if (strlen($this->password) >= 6) {
+                    if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
+                        $answer = 'This email already use';
+                        $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                            $_SESSION['email'], $_SESSION['confEmail']);
+                    } else {
+                        $this->cryptPassword();
+                        $this->addUser();
+                        $_SESSION['login'] = 1;
+                        $this->addFile();
+                    }
+                } else {
+                    $answer = 'Your less than 6 symbols';
                     $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
                         $_SESSION['email'], $_SESSION['confEmail']);
-                } else {
-                    $this->cryptPassword();
-                    $this->addUser();
-                    $_SESSION['login'] = 1;
-                    $this->addFile();
                 }
+
             } else {
-                $answer = 'Your password dont fit the rules';
+                $answer = 'Your password doesnt take special symbol';
                 $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
                     $_SESSION['email'], $_SESSION['confEmail']);
             }
