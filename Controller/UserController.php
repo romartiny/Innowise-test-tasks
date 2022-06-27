@@ -27,7 +27,7 @@ class UserController extends Controller
     public string $fileTmpName;
     public float $fileSize;
     public int $fileError;
-    public int $fileCode;
+    public bool $fileCode;
     public string $fileExif;
     public string $fileType;
     public string $session;
@@ -109,7 +109,7 @@ class UserController extends Controller
         $this->attemptsInit();
     }
 
-    public function registerForm()
+    public function showRegister()
     {
         $this->twigRegister();
     }
@@ -126,11 +126,7 @@ class UserController extends Controller
 
     public function isSame(): bool
     {
-        if ($this->email === $this->confEmail && $this->password === $this->confPassword) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->email === $this->confEmail && $this->password === $this->confPassword;
     }
 
     public function checkPassword(): bool
@@ -150,11 +146,7 @@ class UserController extends Controller
 
     public function addUser()
     {
-        $email = $this->email;
-        $firstName = $this->firstName;
-        $lastName = $this->lastName;
-        $password = $this->password;
-        $this->model->addUser($email, $firstName, $lastName, $password);
+        $this->model->addUser($this->email, $this->firstName, $this->lastName, $this->password);
     }
 
     public function initSession()
@@ -180,7 +172,7 @@ class UserController extends Controller
 
     public function ipAttempts()
     {
-        return $this->model->checkIpAttempts($this->getIpAddress());
+        return $this->model->checkCountIpAttempts($this->getIpAddress());
     }
 
     /**
@@ -189,7 +181,7 @@ class UserController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function register()
+    public function registerExecute()
     {
         $this->sessionStart();
         $this->getRegisterData();
@@ -230,7 +222,7 @@ class UserController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function login()
+    public function loginExecute()
     {
         $this->sessionStart();
         $this->getLoginData();
@@ -238,7 +230,7 @@ class UserController extends Controller
         $this->setCookie();
         $_SESSION['email'] = $this->email;
         if ($_SESSION['attempt'] === 3) { //
-            if ($this->model->checkIpAttempts($this->ipAttempts()) > 0) {
+            if ($this->model->checkCountIpAttempts($this->ipAttempts()) > 0) {
                 $result = 'Your ip was banned for 15 minutes. Be inactive this time.';
                 $this->twigLoginResult($result, $_SESSION['email']);
             }
@@ -266,15 +258,11 @@ class UserController extends Controller
     public function addFile()
     {
         $this->checkUploadDir();
-        $extends = $this->getExtension();
-        $dataFiles = $this->getFileList();
         if (!empty($this->fileName)) {
-            $fileName = $this->fileName;
-            $fileSize = $this->fileSize;
-            $fileExif = $this->fileExif;
-            $this->twigFileResult($fileName, $fileSize, $fileExif, $dataFiles, $extends);
+            $this->twigFileResult($this->fileName, $this->fileSize, $this->fileExif,
+                $this->getFileList(), $this->getExtension());
         } else {
-            $this->twigFile($dataFiles, $extends);
+            $this->twigFile($this->getFileList(), $this->getExtension());
         }
     }
 
@@ -291,6 +279,7 @@ class UserController extends Controller
     public function getExtension(): string
     {
         $currentExt = $this->config::EXTENSION;
+
         return implode(', .', $currentExt);
     }
 
@@ -320,13 +309,13 @@ class UserController extends Controller
         }
     }
 
-    public function isFreeSpace()
+    public function checkFreeSpace(): bool
     {
         $freeSpace = disk_free_space(__DIR__ . "/../");
         if ($this->fileSize > $freeSpace) {
-            $this->fileCode = 0;
+            return false;
         } else {
-            $this->fileCode = 1;
+            return true;
         }
     }
 
@@ -349,7 +338,7 @@ class UserController extends Controller
         $fileName = $this->randomFileName;
         $fileExt = explode('.', $fileName);
         $fileActualExt = strtolower(end($fileExt));
-        $exifProp = ['jpg', 'png', 'jpg', 'jpeg'];
+        $exifProp = $this->config::EXTENSION;
         if (in_array($fileActualExt, $exifProp)) {
             $fp = $this->model->openImage($uploadPath, $fileName);
             if (!$fp) {
@@ -372,13 +361,13 @@ class UserController extends Controller
 
     public function addLog()
     {
-        $this->isFreeSpace();
+        $this->checkFreeSpace();
         $dateFile = date("dmY");
         $logName = $this->randomFileName;
         $logTime = date("d-m-Y h:i:sa");
         $logSize = $this->convertSize();
         $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
-        if ($this->fileCode === 1 && $logSize > 0) {
+        if (!$this->fileCode === false && $logSize > 0) {
             $logCode = 'Upload successful';
         } else {
             $logCode = 'Not upload';
@@ -394,11 +383,11 @@ class UserController extends Controller
         $fileDestination = $this->config::UPLOAD_PATH . $this->randomFileName;
         if (in_array($fileActualExt, $this->config::EXTENSION)) {
             if ($this->fileError === 0) {
-                $this->fileCode = 1;
+                $this->fileCode = true;
                 $this->model->uploadFile($this->fileTmpName, $fileDestination);
             }
         } else {
-            $this->fileCode = 0;
+            $this->fileCode = false;
         }
     }
 
@@ -410,7 +399,7 @@ class UserController extends Controller
         $this->getData();
         $this->checkUploadDir();
         $this->checkLogDir();
-        $this->isFreeSpace();
+        $this->checkFreeSpace();
         $this->uploadData();
         $this->getExifData();
         $this->addLog();

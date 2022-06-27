@@ -13,7 +13,7 @@
     <h1 class="title">Login</h1>
     <p class="text-center">{{ result }}</p>
     <form action="index.php" method="post" class="contact-form row">
-        <input type="hidden" name="action" value="login">
+        <input type="hidden" name="action" value="loginExecute">
         <div class="form-field col-lg-12">
             <label for="first-email" class="hidden"></label>
             <input type="email" class="input-text js-input" id="first-email" name="email" placeholder="Email" value="{{ emailSession }}" required>
@@ -25,7 +25,7 @@
         </div>
         <div class="form-field col-lg-12">
             <input class="submit-btn" type="submit" value="Submit">
-            <a href="index.php?action=registerForm" class="submit-btn reg-link">Register</a>
+            <a href="index.php?action=showRegister" class="submit-btn reg-link">Register</a>
         </div>
     </form>
 </section>

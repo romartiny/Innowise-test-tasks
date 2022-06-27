@@ -71,7 +71,7 @@ class UserModel
     public function uploadLog($logFileName, $logName, $logTime, $logSize, $logCode)
     {
         $logFile = fopen($logFileName, "a");
-        $log = "| $logTime | $logName | $logSize | $logCode\n";
+        $log = "$logTime | $logName | $logSize | $logCode\n";
         fwrite($logFile, $log);
     }
 
@@ -91,7 +91,7 @@ class UserModel
         }
     }
 
-    public function checkIpAttempts($userIp)
+    public function checkCountIpAttempts($userIp)
     {
         try {
             $this->checkAttemptTime();
