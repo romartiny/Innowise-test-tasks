@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Jun 27, 2022 at 12:01 AM
+-- Generation Time: Jun 28, 2022 at 01:10 PM
 -- Server version: 5.7.34
 -- PHP Version: 7.4.21
 
@@ -39,7 +39,7 @@ CREATE TABLE `attempts` (
 --
 
 INSERT INTO `attempts` (`ip`, `email`, `time_start`, `time_end`) VALUES
-('::1', 'undefined', '2022-06-26 20:56:32', '2022-06-26 21:11:32');
+('::1', 'undefined', '2022-06-27 16:09:21', '2022-06-27 16:24:21');
 
 -- --------------------------------------------------------
 
@@ -70,7 +70,8 @@ INSERT INTO `users` (`id`, `email`, `first_name`, `last_name`, `password`, `crea
 (17, 'checkmaks71@gmail.com', 'afsasfsaf', 'Nowman', 'adda0b334260c9190fdf1c1eb3b85a0d', '2022-06-24 19:29:19'),
 (18, 'user1@test.com', 'John', 'afssaffsa', 'adda0b334260c9190fdf1c1eb3b85a0d', '2022-06-24 20:07:21'),
 (19, 'user12@test.com', 'John', 'Nowman', 'adda0b334260c9190fdf1c1eb3b85a0d', '2022-06-24 21:33:53'),
-(20, '123123@gmail.com', '21312321', 'Nowman', 'adda0b334260c9190fdf1c1eb3b85a0d', '2022-06-26 19:57:59');
+(20, '123123@gmail.com', '21312321', 'Nowman', 'adda0b334260c9190fdf1c1eb3b85a0d', '2022-06-26 19:57:59'),
+(21, 'asffas111@fsa.asf', 'John', '123213213', 'adda0b334260c9190fdf1c1eb3b85a0d', '2022-06-27 15:43:11');
 
 --
 -- Indexes for dumped tables
@@ -97,7 +98,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
