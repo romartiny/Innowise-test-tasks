@@ -1,7 +1,4 @@
 <?php
-
-namespace App\Config;
-
 class Config
 {
     public const UPLOAD_PATH = 'upload/';
