@@ -407,11 +407,14 @@ class UserController extends Controller
         $this->getData();
         $this->checkUploadDir();
         $this->checkLogDir();
-        $this->checkFreeSpace();
-        $this->uploadData();
-        $this->getExifData();
-        $this->addLog();
-        $this->addFile();
+        if ($this->checkFreeSpace() === true) {
+            $this->uploadData();
+            $this->getExifData();
+            $this->addLog();
+            $this->addFile();
+        } else {
+            $this->addLog();
+        }
     }
 
     public function sessionStart()
