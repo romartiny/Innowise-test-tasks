@@ -12,7 +12,14 @@ use Twig\Loader\FilesystemLoader;
 
 class Controller
 {
-    //LOGIN
+    public function twigHead()
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        echo $twig->render('login.html.twig');
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
