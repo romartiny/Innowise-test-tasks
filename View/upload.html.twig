@@ -1,15 +1,3 @@
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <meta name="viewport"#}
-{#          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">#}
-{#    <meta http-equiv="X-UA-Compatible" content="ie=edge">#}
-{#    <title>FileUpload</title>#}
-{#    <link href="/Public/assets/css/upload.css" rel="stylesheet">#}
-{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"#}
-{#          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">#}
-{#    <script src="https://use.fontawesome.com/3a2eaf6206.js"></script> //fix#}
-{#</head>#}
 <body>
 <div class="container">
     <a href="index.php?action=logout" class="logout-link">Logout</a>
@@ -18,12 +6,11 @@
         <input type="hidden" name="action" value="add" required>
         <div class="block-send">
             <label class="label-file" for="file">
-                <i class="fa fa-2x fa-camera"></i>
-                <input class="input-file" type="file" name="file" id="file" onchange="validateSize(this)"
+                <input class="input-file" type="file" name="file" id="file"
                        accept="{{ extends }}" required>
             </label>
             <div class="button-block">
-                <button type="submit" value="submit" class="btn btn-primary">Add</button>
+                <button type="submit" value="submit" class="btn btn-primary" onclick="validateSize(this)">Add</button>
             </div>
         </div>
     </form>

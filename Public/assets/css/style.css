@@ -11,22 +11,6 @@
     text-align: center;
 }
 
-.register .title {
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-size: 3.2em;
-    line-height: 48px;
-    padding-bottom: 10px;
-    color: #5543ca;
-    background: #5543ca;
-    background: -moz-linear-gradient(left, #f4524d 0%, #5543ca 100%) !important;
-    background: -webkit-linear-gradient(left, #f4524d 0%, #5543ca 100%) !important;
-    background: linear-gradient(to right, #f4524d 0%, #5543ca 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-}
-
 .contact-form .form-field {
     position: relative;
     margin: 20px 0;
@@ -122,24 +106,6 @@
     border: 2px solid #064497;
     border-radius: 25px;
     padding: 30px;
-}
-
-.text-center {
-    text-align: center;
-    margin-top: -10px;
-    margin-left: 50px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-size: 3.2em;
-    line-height: 48px;
-    padding-bottom: 10px;
-    color: #5543ca;
-    background: #5543ca;
-    background: -moz-linear-gradient(left, #f4524d 0%, #5543ca 100%) !important;
-    background: -webkit-linear-gradient(left, #f4524d 0%, #5543ca 100%) !important;
-    background: linear-gradient(to right, #f4524d 0%, #5543ca 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
 }
 
 .block-send {
