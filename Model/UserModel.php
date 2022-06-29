@@ -2,26 +2,52 @@
 
 namespace App\UserModel;
 
-require_once __DIR__ . '/../Config/Credentials.php';
-
-use App\Credentials\Credentials;
+use App\Config\Config;
+use Exception;
 
 class UserModel
 {
-    public Credentials $database;
+    public Config $config;
 
     public function __construct()
     {
-        $this->database = new Credentials();
+        $this->config = new Config();
     }
-    public function getUserLogin($email, $password): ?string
+
+    public function uploadFile($fileTmpName, $fileDestination)
     {
-        $conf = $this->database->getCredentials();
-        foreach ($conf as $key => $value) {
-            if ($key === $email && password_verify($password, $value['password'])) {
-                return $value['name'];
-            }
+        move_uploaded_file($fileTmpName, $fileDestination);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function createUploadDir($dirname)
+    {
+        if (!mkdir($dirname, 0777) && !is_dir($dirname)) {
+            throw new Exception(sprintf('Directory "%s" was not created', $dirname));
         }
-        return null;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function createLogDir($dirname)
+    {
+        if (!mkdir($dirname, 0777) && !is_dir($dirname)) {
+            throw new Exception(sprintf('Directory "%s" was not created', $dirname));
+        }
+    }
+
+    public function uploadLog($logFileName, $logName, $logTime, $logSize, $logCode)
+    {
+        $logFile = fopen($logFileName, "a");
+        $log = "| $logTime | $logName | $logSize | $logCode\n";
+        fwrite($logFile, $log);
+    }
+
+    public function openImage($uploadPath, $fileName)
+    {
+        return fopen(__DIR__ . "/../" . $uploadPath . $fileName, 'rb');
     }
 }
