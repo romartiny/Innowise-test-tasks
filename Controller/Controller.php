@@ -12,12 +12,14 @@ use Twig\Loader\FilesystemLoader;
 
 class Controller
 {
-    public function twigHead()
+    public function twigHead($title)
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
-        echo $twig->render('login.html.twig');
+        echo $twig->render('head.html.twig', [
+            'title' => $title
+        ]);
     }
 
     /**
@@ -30,6 +32,8 @@ class Controller
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
+        $title = 'Login';
+        $this->twigHead($title);
         echo $twig->render('login.html.twig');
     }
 
@@ -43,6 +47,8 @@ class Controller
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
+        $title = 'Login';
+        $this->twigHead($title);
         echo $twig->render('login.html.twig', [
             'result' => $result,
             'emailSession' => $sessionEmail
@@ -56,6 +62,8 @@ class Controller
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
+        $title = 'Register';
+        $this->twigHead($title);
         echo $twig->render('register.html.twig');
     }
 
@@ -69,6 +77,8 @@ class Controller
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
+        $title = 'Register';
+        $this->twigHead($title);
         echo $twig->render('register.html.twig', [
             'answer' => $answer,
             'firstName' => $firstNameSession,
@@ -85,6 +95,8 @@ class Controller
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
+        $title = 'File Upload';
+        $this->twigHead($title);
         echo $twig->render('upload.html.twig', [
             'name' => $fileName,
             'size' => $fileSize,
@@ -99,6 +111,8 @@ class Controller
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
+        $title = 'File Upload';
+        $this->twigHead($title);
         echo $twig->render('upload.html.twig', [
             'data' => $dataFiles,
             'extends' => $extends
