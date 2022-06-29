@@ -12,6 +12,12 @@ require_once __DIR__ . '/../Config/Config.php';
 
 class UserController extends Controller
 {
+    public string $firstName;
+    public string $lastName;
+    public string $email;
+    public string $confEmail;
+    public string $password;
+    public string $confPassword;
     public $file;
     public string $fileName;
     public string $randomFileName;
@@ -29,17 +35,44 @@ class UserController extends Controller
         $this->model = new UserModel();
         $this->config = new Config();
     }
-
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function init(): void
+    {
+        if (!isset($_POST['action'])) {
+            $this->index();
+        } else {
+            $action = $_POST['action'];
     public function init(): void
     {
         if (!isset($_REQUEST['action'])) {
             $this->index();
         } else {
             $action = $_REQUEST['action'];
+<<<<<<< HEAD
+>>>>>>> master
+=======
+>>>>>>> master
             $this->$action();
         }
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function index()
+    {
+        $this->twigIndex();
+    }
+
+    public function getData()
     public function getFileList()
     {
         return array_diff(scandir($this->config::UPLOAD_PATH), array('.', '..'));
@@ -85,7 +118,7 @@ class UserController extends Controller
             $this->model->createUploadDir($dirname);
         }
     }
-
+    public function index()
     public function checkLogDir()
     {
         $dirname = $this->config::LOG_PATH;
