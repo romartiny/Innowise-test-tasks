@@ -101,10 +101,12 @@ class UserController extends Controller
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws Exception
      */
     public function index()
     {
         $this->sessionStart();
+        $this->checkLogDir();
         $this->sessionCheck();
         $this->attemptsInit();
     }
@@ -187,8 +189,8 @@ class UserController extends Controller
         $this->getRegisterData();
         $this->initSession();
         if ($this->isSame() === true) {
-            if ($this->checkPassword() === true) {
-                if (strlen($this->password) >= 6) {
+            if (strlen($this->password) >= 6) {
+                if ($this->checkPassword() === true) {
                     if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
                         $answer = 'This email already use';
                         $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
@@ -200,13 +202,12 @@ class UserController extends Controller
                         $this->addFile();
                     }
                 } else {
-                    $answer = 'Your less than 6 symbols';
+                    $answer = 'Your password doesnt take special symbol';
                     $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
                         $_SESSION['email'], $_SESSION['confEmail']);
                 }
-
             } else {
-                $answer = 'Your password doesnt take special symbol';
+                $answer = 'Your less than 6 symbols';
                 $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
                     $_SESSION['email'], $_SESSION['confEmail']);
             }
