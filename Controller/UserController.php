@@ -1,16 +1,14 @@
 <?php
 
-<<<<<<< HEAD
 namespace App\Controller;
 
 use App\UserModel\UserModel as UserModel;
+use App\Config\Config as Config;
 use App\Controller\Controller as Controller;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../Model/UserModel.php';
+require_once __DIR__ . '/../Config/Config.php';
 
 class UserController extends Controller
 {
@@ -20,28 +18,23 @@ class UserController extends Controller
     public string $confEmail;
     public string $password;
     public string $confPassword;
-
-=======
-require_once __DIR__ . '/../Model/UserModel.php';
-require_once __DIR__ . '/Controller.php';
-
-class UserController extends Controller
-{
-    public string $name;
-    public string $email;
-    public string $gender;
-    public string $status;
-    public array $result;
-    public array $table;
->>>>>>> master
+    public $file;
+    public string $fileName;
+    public string $randomFileName;
+    public string $fileTmpName;
+    public float $fileSize;
+    public int $fileError;
+    public int $fileCode;
+    public string $fileExif;
+    public string $fileType;
     public UserModel $model;
+    public Config $config;
 
     public function __construct()
     {
         $this->model = new UserModel();
+        $this->config = new Config();
     }
-
-<<<<<<< HEAD
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -53,18 +46,21 @@ class UserController extends Controller
             $this->index();
         } else {
             $action = $_POST['action'];
-=======
     public function init(): void
     {
         if (!isset($_REQUEST['action'])) {
             $this->index();
         } else {
             $action = $_REQUEST['action'];
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
             $this->$action();
         }
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     /**
      * @throws SyntaxError
@@ -77,158 +73,153 @@ class UserController extends Controller
     }
 
     public function getData()
+    public function getFileList()
     {
-        $this->firstName = $_POST['first-name'];
-        $this->lastName = $_POST['last-name'];
-        $this->email = $_POST['email'];
-        $this->confEmail = $_POST['conf-email'];
-        $this->password = $_POST['password'];
-        $this->confPassword = $_POST['conf-password'];
+        return array_diff(scandir($this->config::UPLOAD_PATH), array('.', '..'));
     }
 
-    public function isSame(): bool
-    {
-        if ($this->email === $this->confEmail && $this->password === $this->confPassword) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function checkPassword(): bool
-    {
-        $regex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&]).*$/';
-        if (strlen($this->password) >= 6 && preg_match($regex, $this->password)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function cryptPassword(): string
-    {
-        return $this->password = md5($this->password);
-    }
-
-    public function addUser()
-    {
-        $email = $this->email;
-        $firstName = $this->firstName;
-        $lastName = $this->lastName;
-        $password = $this->password;
-        $this->model->addUser($email, $firstName, $lastName, $password);
-    }
-
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    public function register()
-    {
-        $this->getData();
-        if ($this->isSame() === true) {
-            if ($this->checkPassword() === true) {
-                $this->cryptPassword();
-                $this->addUser();
-                $answer = 'Create Successfully';
-            } else {
-                $answer = 'Your password dont fit the rules';
-            }
-        } else {
-            $answer = 'Your passwords is not the same';
-        }
-        $this->twigResult($answer);
-    }
-
-=======
     public function index()
     {
-        $userData = $this->getUserData();
-        $this->twigIndex($userData);
+        $this->checkUploadDir();
+        $extends = $this->getExtension();
+        $dataFiles = $this->getFileList();
+        if (!empty($this->fileName)) {
+            $fileName = $this->fileName;
+            $fileSize = $this->fileSize;
+            $fileExif = $this->fileExif;
+            $this->twigResult($fileName, $fileSize, $fileExif, $dataFiles, $extends);
+        } else {
+            $this->twigIndex($dataFiles, $extends);
+        }
     }
 
-    public function create(): void
+    public function getData()
     {
-        $gender = $this->getGenderList();
-        $status = $this->getStatusList();
-        $this->twigAdd($gender, $status);
+        $this->file = $_FILES['file'];
+        $this->fileName = $_FILES['file']['name'];
+        $this->fileTmpName = $_FILES['file']['tmp_name'];
+        $this->fileSize = $_FILES['file']['size'];
+        $this->fileError = $_FILES['file']['error'];
+        $this->fileType = $_FILES['file']['type'];
     }
 
-    public function edit(): void
+    public function getExtension()
     {
-        $gender = $this->getGenderList();
-        $status = $this->getStatusList();
-        $user = $this->model->getSingleId($_REQUEST['id']);
-        $user = json_decode($user);
-
-
-        $this->twigEdit($user, $gender, $status);
+        $currentExt = $this->config::EXTENSION;
+        return implode(', .', $currentExt);
     }
 
-    public function add(): void
+    public function checkUploadDir()
     {
-        $result = $this->getParam();
-        $this->model->addUser($result);
+        $dirname = $this->config::UPLOAD_PATH;
+        $filename = __DIR__ . '/../' . $dirname;
 
-        header("Location: index.php");
-        exit();
+        if (!file_exists($filename)) {
+            $this->model->createUploadDir($dirname);
+        }
     }
-
-    public function editor(): void
+    public function index()
+    public function checkLogDir()
     {
-        $userId = $_POST['id'];
-        $result = $this->getParam();
-        $this->model->updateData($userId, $result);
+        $dirname = $this->config::LOG_PATH;
+        $filename = __DIR__ . '/../' . $dirname;
 
-        header("Location: index.php");
-        exit();
+        if (!file_exists($filename)) {
+            $this->model->createLogDir($dirname);
+        }
     }
 
-    public function delete(): void
+    public function isFreeSpace()
     {
-        $this->model->deleteUser($_REQUEST['id']);
-
-        header("Location: index.php");
-        exit();
+        $freeSpace = disk_free_space(__DIR__ . "/../");
+        if ($this->fileSize > $freeSpace) {
+            $this->fileCode = 0;
+        } else {
+            $this->fileCode = 1;
+        }
     }
 
-    public function getUserData()
+    public function convertSize(): string
     {
-        $this->table = json_decode($this->model->getData());
-        return $this->table;
+        if ($this->fileSize == 0) {
+            $convertNum = 0;
+        } else {
+            $base = log($this->fileSize, 1024);
+            $suffixes = ['', 'kb', 'mb', 'gb', 'tb'];
+            $convertNum = round(pow(1024, $base - floor($base)), 1) .' '. $suffixes[floor($base)];
+        }
+
+        return $convertNum;
     }
 
-    public function getParam(): array
+    public function getExifData()
     {
-        $this->name = $_POST['name'];
-        $this->email = $_POST['email'];
-        $this->gender = $_POST['gender'];
-        $this->status = $_POST['status'];
-        $this->result = [
-            "name" => "$this->name",
-            "email" => "$this->email",
-            "gender" => "$this->gender",
-            "status" => "$this->status"
-        ];
+        $uploadPath = $this->config::UPLOAD_PATH;
+        $fileName = $this->randomFileName;
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+        $exifProp = ['jpg', 'png', 'jpg', 'jpeg'];
+        if (in_array($fileActualExt, $exifProp)) {
+            $fp = $this->model->openImage($uploadPath, $fileName);
+            if (!$fp) {
+                $exif = exif_read_data($fp);
+                if (!$exif) {
+                    exit;
+                }
+            } else {
+                $exif = exif_read_data($fp);
+                $exifData = json_encode($exif);
+                $exifFix = preg_replace('/[\"\'\{\}]/', '', $exifData);
+                $this->fileExif = str_replace(',', ' ', $exifFix);
+            }
+        } else {
+            $this->fileExif = 'No exif data';
+        }
 
-        return $this->result;
+        return $this->fileExif;
     }
 
-    public function getGenderList(): array
+    public function addLog()
     {
-        return [
-            'male' => 'Male',
-            'female' => 'Female'
-        ];
+        $this->isFreeSpace();
+        $dateFile = date("dmY");
+        $logName = $this->randomFileName;
+        $logTime = date("d-m-Y h:i:sa");
+        $logSize = $this->convertSize();
+        $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
+        if ($this->fileCode === 1 && $logSize > 0) {
+            $logCode = 'Upload successful';
+        } else {
+            $logCode = 'Not upload';
+        }
+        $this->model->uploadLog($logFileName, $logName, $logTime, $logSize, $logCode);
     }
 
-    public function getStatusList(): array
+    public function uploadData()
     {
-        return [
-            'active' => 'Active',
-            'inactive' => 'Inactive'
-        ];
+        $fileExt = explode('.', $this->fileName);
+        $fileActualExt = strtolower(end($fileExt));
+        $this->randomFileName = uniqid('', true) . '.' . $fileActualExt;
+        $fileDestination = $this->config::UPLOAD_PATH . $this->randomFileName;
+        if(in_array($fileActualExt, $this->config::EXTENSION)) {
+            if ($this->fileError === 0) {
+                $this->fileCode = 1;
+                $this->model->uploadFile($this->fileTmpName, $fileDestination);
+            }
+        } else {
+            $this->fileCode = 0;
+        }
     }
->>>>>>> master
+
+    public function add()
+    {
+        $this->getData();
+        $this->checkUploadDir();
+        $this->checkLogDir();
+        $this->isFreeSpace();
+        $this->uploadData();
+        $this->getExifData();
+        $this->addLog();
+        $this->index();
+    }
 }

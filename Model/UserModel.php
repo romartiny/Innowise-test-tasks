@@ -8,14 +8,14 @@ use App\DatabaseConfig\DatabaseConfig;
 
 class UserModel
 {
-    public DatabaseConfig $connect;
+    public Config $config;
 
     public function __construct()
     {
         $this->connect = new DatabaseConfig();
     }
 
-    public function addUser($email, $firstName, $lastName, $password): void
+    public function uploadFile($fileTmpName, $fileDestination)
     {
         try {
             $query = 'INSERT INTO users (email, first_name, last_name, password) VALUES (?,?,?,?)';
