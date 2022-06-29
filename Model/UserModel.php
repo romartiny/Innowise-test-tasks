@@ -1,118 +1,53 @@
 <?php
 
-require_once __DIR__ . '/../Config/Config.php';
+namespace App\UserModel;
+
+use App\Config\Config;
+use Exception;
 
 class UserModel
 {
-    public $id;
-    public Config $connection;
+    public Config $config;
 
     public function __construct()
     {
-        $this->connection = new Config();
+        $this->config = new Config();
     }
 
-    public function getSingleId(int $id)
+    public function uploadFile($fileTmpName, $fileDestination)
     {
-        $this->id = $id;
-
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->connection::BASIC_URL . "/$this->id?access-token=" . $this->connection::TOKEN,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array('Accept: application/json', 'Content-Type: application/json'),
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
+        move_uploaded_file($fileTmpName, $fileDestination);
     }
 
-    public function updateData(int $userId, array $result)
+    /**
+     * @throws Exception
+     */
+    public function createUploadDir($dirname)
     {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->connection::BASIC_URL . "/$userId?access-token=" . $this->connection::TOKEN,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS => json_encode($result),
-            CURLOPT_HTTPHEADER => array('Accept: application/json', 'Content-Type: application/json'),
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
+        if (!mkdir($dirname, 0777) && !is_dir($dirname)) {
+            throw new Exception(sprintf('Directory "%s" was not created', $dirname));
+        }
     }
 
-    public function getData()
+    /**
+     * @throws Exception
+     */
+    public function createLogDir($dirname)
     {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->connection::BASIC_URL . "?access-token=" . $this->connection::TOKEN,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json')
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
+        if (!mkdir($dirname, 0777) && !is_dir($dirname)) {
+            throw new Exception(sprintf('Directory "%s" was not created', $dirname));
+        }
     }
 
-    public function addUser(array $result)
+    public function uploadLog($logFileName, $logName, $logTime, $logSize, $logCode)
     {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->connection::BASIC_URL . "?access-token=" . $this->connection::TOKEN,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($result),
-            CURLOPT_HTTPHEADER => array('Accept: application/json', 'Content-Type: application/json'),
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
+        $logFile = fopen($logFileName, "a");
+        $log = "| $logTime | $logName | $logSize | $logCode\n";
+        fwrite($logFile, $log);
     }
 
-    public function deleteUser(int $id)
+    public function openImage($uploadPath, $fileName)
     {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->connection::BASIC_URL . "/$id?access-token=" . $this->connection::TOKEN,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'DELETE',
-            CURLOPT_HTTPHEADER => array('Content-Type: application/json')
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
+        return fopen(__DIR__ . "/../" . $uploadPath . $fileName, 'rb');
     }
 }

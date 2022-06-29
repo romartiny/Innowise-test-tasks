@@ -1,5 +1,5 @@
-.DS_STORE
 .idea
-vendor
+.DS_Store
 upload
 logs
+vendor

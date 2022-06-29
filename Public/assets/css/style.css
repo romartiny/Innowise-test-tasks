@@ -25,3 +25,20 @@
 .main-text {
     margin-top: 10px;
 }
+
+.results {
+    margin-right: 0 auto;
+}
+
+.text-result {
+    width: 30px;
+    height: 30px;
+}
+
+.file__block-list {
+    float: right;
+}
+
+.file__block-item {
+    list-style-type: numbers;
+}
