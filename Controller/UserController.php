@@ -90,7 +90,7 @@ class UserController extends Controller
                 $_SESSION['email'] = 'undefined';
             }
             $dateFile = date("dmY");
-            $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
+            $logFileName = $this->config::LOG_PATH . "ip_$dateFile.log";
             $this->model->addIpAttempt($this->getIpAddress(), $_SESSION['email']);
             $this->model->uploadIpLog($logFileName, $this->getIpAddress(),
                 $_SESSION['email'], date('Y-m-d H:i:s'), date('Y-m-d H:i:s', time() + 15 * 60));
@@ -181,6 +181,92 @@ class UserController extends Controller
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     */
+    public function userRegister()
+    {
+        $this->checkSame();
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function checkSame()
+    {
+        if ($this->isSame() === true) {
+            $this->checkLength();
+        } else {
+            $answer = 'Your passwords is not the same';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'], $_SESSION['email'],
+                $_SESSION['confEmail']);
+        }
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function checkLength()
+    {
+        if (strlen($this->password) >= 6) {
+            $this->checkSpecialSymbol();
+        } else {
+            $answer = 'Your less than 6 symbols';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                $_SESSION['email'], $_SESSION['confEmail']);
+        }
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function checkSpecialSymbol()
+    {
+        if ($this->checkPassword() === true) {
+            $this->checkRegister();
+        } else {
+            $answer = 'Your password doesnt take special symbol';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                $_SESSION['email'], $_SESSION['confEmail']);
+        }
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function checkRegister()
+    {
+        if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
+            $answer = 'This email already use';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                $_SESSION['email'], $_SESSION['confEmail']);
+        } else {
+            $this->userAdd();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function userAdd()
+    {
+        $this->cryptPassword();
+        $this->addUser();
+        $_SESSION['login'] = 1;
+        $this->addFile();
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
      * @throws Exception
      */
     public function registerExecute()
@@ -188,34 +274,7 @@ class UserController extends Controller
         $this->sessionStart();
         $this->getRegisterData();
         $this->initSession();
-        if ($this->isSame() === true) {
-            if (strlen($this->password) >= 6) {
-                if ($this->checkPassword() === true) {
-                    if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
-                        $answer = 'This email already use';
-                        $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
-                            $_SESSION['email'], $_SESSION['confEmail']);
-                    } else {
-                        $this->cryptPassword();
-                        $this->addUser();
-                        $_SESSION['login'] = 1;
-                        $this->addFile();
-                    }
-                } else {
-                    $answer = 'Your password doesnt take special symbol';
-                    $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
-                        $_SESSION['email'], $_SESSION['confEmail']);
-                }
-            } else {
-                $answer = 'Your less than 6 symbols';
-                $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
-                    $_SESSION['email'], $_SESSION['confEmail']);
-            }
-        } else {
-            $answer = 'Your passwords is not the same';
-            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'], $_SESSION['email'],
-                $_SESSION['confEmail']);
-        }
+        $this->userRegister();
     }
 
     public function getLoginData()
@@ -406,7 +465,7 @@ class UserController extends Controller
     {
         $this->getData();
         $this->checkUploadDir();
-        $this->checkLogDir();
+        $this->checkLogDir(); // add true or false
         if ($this->checkFreeSpace() === true) {
             $this->uploadData();
             $this->getExifData();

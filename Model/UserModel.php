@@ -119,7 +119,7 @@ class UserModel
     public function uploadIpLog($logFileName, $ip, $email, $startDate, $endDate)
     {
         $logFile = fopen($logFileName, "a");
-        $log = "| $ip | $email | $startDate | $endDate\n";
+        $log = "$ip | $email | $startDate | $endDate\n";
         fwrite($logFile, $log);
     }
 }
