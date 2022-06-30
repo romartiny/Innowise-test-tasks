@@ -9,18 +9,59 @@ use Twig\Loader\FilesystemLoader;
 
 class Controller
 {
+    public function twigHead($title)
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        echo $twig->render('head.html.twig', [
+            'title' => $title
+        ]);
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function twigResult($fileName, $fileSize, $fileExif, $dataFiles, $extends)
+    public function twigIndex()
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
-
+        $title = 'Login';
+        $this->twigHead($title);
         echo $twig->render('login.html.twig');
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function twigLoginResult($result, $sessionEmail)
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        $title = 'Login';
+        $this->twigHead($title);
+        echo $twig->render('login.html.twig', [
+            'result' => $result,
+            'emailSession' => $sessionEmail
+        ]);
+    }
+
+    //REGISTER
+
+    public function twigRegister()
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        $title = 'Register';
+        $this->twigHead($title);
+        echo $twig->render('register.html.twig');
     }
 
     /**
@@ -28,25 +69,48 @@ class Controller
      * @throws SyntaxError
      * @throws LoaderError
      */
-    public function twigResult($answer)
-        echo $twig->render('index.html.twig', [
+    public function twigRegisterResult($answer, $firstNameSession, $lastNameSession, $emailSession, $confEmailSession)
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        $title = 'Register';
+        $this->twigHead($title);
+        echo $twig->render('register.html.twig', [
+            'answer' => $answer,
+            'firstName' => $firstNameSession,
+            'lastName' => $lastNameSession,
+            'email' => $emailSession,
+            'confEmail' => $confEmailSession
+        ]);
+    }
+
+    //DATA
+
+    public function twigFileResult($fileName, $fileSize, $fileExif, $dataFiles, $extends)
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../View');
+        $twig = new Environment($loader);
+
+        $title = 'File Upload';
+        $this->twigHead($title);
+        echo $twig->render('upload.html.twig', [
             'name' => $fileName,
             'size' => $fileSize,
             'exif' => $fileExif,
             'data' => $dataFiles,
             'extends' => $extends
-            ]);
+        ]);
     }
 
-    public function twigIndex($dataFiles, $extends)
+    public function twigFile($dataFiles, $extends)
     {
         $loader = new FilesystemLoader(__DIR__ . '/../View');
         $twig = new Environment($loader);
 
-
-        echo $twig->render('login.html.twig', [
-            'answer' => $answer
-        echo $twig->render('index.html.twig', [
+        $title = 'File Upload';
+        $this->twigHead($title);
+        echo $twig->render('upload.html.twig', [
             'data' => $dataFiles,
             'extends' => $extends
         ]);

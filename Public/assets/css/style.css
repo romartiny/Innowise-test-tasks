@@ -11,22 +11,6 @@
     text-align: center;
 }
 
-.register .title {
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-size: 3.2em;
-    line-height: 48px;
-    padding-bottom: 10px;
-    color: #5543ca;
-    background: #5543ca;
-    background: -moz-linear-gradient(left, #f4524d 0%, #5543ca 100%) !important;
-    background: -webkit-linear-gradient(left, #f4524d 0%, #5543ca 100%) !important;
-    background: linear-gradient(to right, #f4524d 0%, #5543ca 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-}
-
 .contact-form .form-field {
     position: relative;
     margin: 20px 0;
@@ -79,6 +63,17 @@
     border: none;
     width: 160px;
     cursor: pointer;
+=======
+.body-content {
+    display: block;
+    margin-left: auto;
+    max-width: 45%;
+    height: 400px;
+>>>>>>> master
+}
+
+.back-pic {
+    width: 24px;
 }
 
 .submit-btn {
@@ -99,4 +94,53 @@
 
 .help-list {
     list-style: circle;
+}
+
+.login-btn {
+    text-align: center;
+}
+
+.reg-link {
+    float: left;
+    text-align: center;
+    text-decoration: none;
+}
+
+.container {
+    position: relative;
+    max-width: 650px;
+    margin: 50px auto;
+    border: 2px solid #064497;
+    border-radius: 25px;
+    padding: 30px;
+}
+
+.block-send {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-block {
+    padding-left: 30px;
+}
+
+.logout-link {
+    text-decoration: none;
+    float: right;
+    color: black;
+}
+
+.input-file {
+    display: none;
+}
+
+.label-file {
+    cursor: pointer;
+}
+
+.results {
+    text-align: center;
 }

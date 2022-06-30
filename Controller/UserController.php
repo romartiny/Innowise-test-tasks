@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Config\Config as Config;
 use App\UserModel\UserModel as UserModel;
 use App\Config\Config as Config;
 use App\Controller\Controller as Controller;
+use Exception;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../Model/UserModel.php';
@@ -24,9 +29,10 @@ class UserController extends Controller
     public string $fileTmpName;
     public float $fileSize;
     public int $fileError;
-    public int $fileCode;
+    public bool $fileCode;
     public string $fileExif;
     public string $fileType;
+    public string $session;
     public UserModel $model;
     public Config $config;
 
@@ -42,54 +48,286 @@ class UserController extends Controller
      */
     public function init(): void
     {
-        if (!isset($_POST['action'])) {
-            $this->index();
-        } else {
-            $action = $_POST['action'];
-    public function init(): void
-    {
         if (!isset($_REQUEST['action'])) {
             $this->index();
         } else {
             $action = $_REQUEST['action'];
-<<<<<<< HEAD
->>>>>>> master
-=======
->>>>>>> master
             $this->$action();
         }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function sessionCheck()
+    {
+        if (!isset($_SESSION['login'])) {
+            $_SESSION['login'] = 0;
+        }
+        if (!empty($_SESSION['email']) && $_SESSION['login'] === 1) {
+            $extends = $this->getExtension();
+            $dataFiles = $this->getFileList();
+            $this->twigFile($dataFiles, $extends);
+        } else {
+            $this->twigIndex();
+        }
+    }
+
+    public function attemptsInit()
+    {
+        $this->model->checkAttemptTime();
+        if (!isset($_SESSION['attempt'])) {
+            $_SESSION['attempt'] = 0;
+            $_SESSION['attempt_again'] = 1;
+        }
+        if ($_SESSION['attempt_again'] < time() && $_SESSION['attempt'] === 3) {
+            $_SESSION['attempt'] = 0;
+            $this->model->checkAttemptTime();
+        } else {
+            $_SESSION['attempt_again'] = time() + (15 * 60);
+            if (!isset($_SESSION['email'])) {
+                $_SESSION['email'] = 'undefined';
+            }
+            $dateFile = date("dmY");
+            $logFileName = $this->config::LOG_PATH . "ip_$dateFile.log";
+            $this->model->addIpAttempt($this->getIpAddress(), $_SESSION['email']);
+            $this->model->uploadIpLog($logFileName, $this->getIpAddress(),
+                $_SESSION['email'], date('Y-m-d H:i:s'), date('Y-m-d H:i:s', time() + 15 * 60));
+        }
+    }
+
+>>>>>>> master
     /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws Exception
      */
     public function index()
     {
-        $this->twigIndex();
+        $this->sessionStart();
+        $this->checkLogDir();
+        $this->sessionCheck();
+        $this->attemptsInit();
     }
 
-    public function getData()
-    public function getFileList()
+    public function showRegister()
+    {
+        $this->twigRegister();
+    }
+
+    public function getRegisterData()
     {
         return array_diff(scandir($this->config::UPLOAD_PATH), array('.', '..'));
     }
 
     public function index()
     {
-        $this->checkUploadDir();
-        $extends = $this->getExtension();
-        $dataFiles = $this->getFileList();
-        if (!empty($this->fileName)) {
-            $fileName = $this->fileName;
-            $fileSize = $this->fileSize;
-            $fileExif = $this->fileExif;
-            $this->twigResult($fileName, $fileSize, $fileExif, $dataFiles, $extends);
+        return $this->email === $this->confEmail && $this->password === $this->confPassword;
+    }
+
+    public function getData()
+    {
+        $regex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&]).*$/';
+        if (preg_match($regex, $this->password)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getExtension()
+    {
+        $currentExt = $this->config::EXTENSION;
+        return implode(', .', $currentExt);
+    }
+
+    public function checkUploadDir()
+    {
+        $this->model->addUser($this->email, $this->firstName, $this->lastName, $this->password);
+    }
+
+    public function initSession()
+    {
+        $_SESSION['firstName'] = $this->firstName;
+        $_SESSION['lastName'] = $this->lastName;
+        $_SESSION['email'] = $this->email;
+        $_SESSION['confEmail'] = $this->confEmail;
+    }
+
+    public function getIpAddress()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
-            $this->twigIndex($dataFiles, $extends);
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
+    }
+
+    public function ipAttempts()
+    {
+        return $this->model->checkCountIpAttempts($this->getIpAddress());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function userRegister()
+    {
+        $this->checkSame();
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function checkSame()
+    {
+        if ($this->isSame() === true) {
+            $this->checkLength();
+        } else {
+            $answer = 'Your passwords is not the same';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'], $_SESSION['email'],
+                $_SESSION['confEmail']);
+        }
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function checkLength()
+    {
+        if (strlen($this->password) >= 6) {
+            $this->checkSpecialSymbol();
+        } else {
+            $answer = 'Your less than 6 symbols';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                $_SESSION['email'], $_SESSION['confEmail']);
+        }
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function checkSpecialSymbol()
+    {
+        if ($this->checkPassword() === true) {
+            $this->checkRegister();
+        } else {
+            $answer = 'Your password doesnt take special symbol';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                $_SESSION['email'], $_SESSION['confEmail']);
+        }
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function checkRegister()
+    {
+        if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
+            $answer = 'This email already use';
+            $this->twigRegisterResult($answer, $_SESSION['firstName'], $_SESSION['lastName'],
+                $_SESSION['email'], $_SESSION['confEmail']);
+        } else {
+            $this->userAdd();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function userAdd()
+    {
+        $this->cryptPassword();
+        $this->addUser();
+        $_SESSION['login'] = 1;
+        $this->addFile();
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function registerExecute()
+    {
+        $this->sessionStart();
+        $this->getRegisterData();
+        $this->initSession();
+        $this->userRegister();
+    }
+
+    public function getLoginData()
+    {
+        $this->email = $_POST['email'];
+        $this->password = $_POST['password'];
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function loginExecute()
+    {
+        $this->sessionStart();
+        $this->getLoginData();
+        $this->attemptsInit();
+        $this->setCookie();
+        $_SESSION['email'] = $this->email;
+        if ($_SESSION['attempt'] === 3) { //
+            if ($this->model->checkCountIpAttempts($this->ipAttempts()) > 0) {
+                $result = 'Your ip was banned for 15 minutes. Be inactive this time.';
+                $this->twigLoginResult($result, $_SESSION['email']);
+            }
+        } else {
+            if ($this->model->checkUser($this->email, md5($this->password)) > 0) {
+                $_SESSION['login'] = 1;
+                $this->addFile();
+            } else {
+                $_SESSION['login'] = 0;
+                $_SESSION['attempt'] += 1;
+                $result = "Account not found or password was wrong";
+                $this->twigLoginResult($result, $_SESSION['email']);
+            }
+        }
+    }
+
+    public function getFileList()
+    {
+        return array_diff(scandir($this->config::UPLOAD_PATH), array('.', '..'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addFile()
+    {
+        $this->checkUploadDir();
+        if (!empty($this->fileName)) {
+            $this->twigFileResult($this->fileName, $this->fileSize, $this->fileExif,
+                $this->getFileList(), $this->getExtension());
+        } else {
+            $this->twigFile($this->getFileList(), $this->getExtension());
         }
     }
 
@@ -103,12 +341,16 @@ class UserController extends Controller
         $this->fileType = $_FILES['file']['type'];
     }
 
-    public function getExtension()
+    public function getExtension(): string
     {
         $currentExt = $this->config::EXTENSION;
+
         return implode(', .', $currentExt);
     }
 
+    /**
+     * @throws Exception
+     */
     public function checkUploadDir()
     {
         $dirname = $this->config::UPLOAD_PATH;
@@ -118,7 +360,10 @@ class UserController extends Controller
             $this->model->createUploadDir($dirname);
         }
     }
-    public function index()
+
+    /**
+     * @throws Exception
+     */
     public function checkLogDir()
     {
         $dirname = $this->config::LOG_PATH;
@@ -129,13 +374,13 @@ class UserController extends Controller
         }
     }
 
-    public function isFreeSpace()
+    public function checkFreeSpace(): bool
     {
         $freeSpace = disk_free_space(__DIR__ . "/../");
         if ($this->fileSize > $freeSpace) {
-            $this->fileCode = 0;
+            return false;
         } else {
-            $this->fileCode = 1;
+            return true;
         }
     }
 
@@ -146,7 +391,7 @@ class UserController extends Controller
         } else {
             $base = log($this->fileSize, 1024);
             $suffixes = ['', 'kb', 'mb', 'gb', 'tb'];
-            $convertNum = round(pow(1024, $base - floor($base)), 1) .' '. $suffixes[floor($base)];
+            $convertNum = round(pow(1024, $base - floor($base)), 1) . ' ' . $suffixes[floor($base)];
         }
 
         return $convertNum;
@@ -158,7 +403,7 @@ class UserController extends Controller
         $fileName = $this->randomFileName;
         $fileExt = explode('.', $fileName);
         $fileActualExt = strtolower(end($fileExt));
-        $exifProp = ['jpg', 'png', 'jpg', 'jpeg'];
+        $exifProp = $this->config::EXTENSION;
         if (in_array($fileActualExt, $exifProp)) {
             $fp = $this->model->openImage($uploadPath, $fileName);
             if (!$fp) {
@@ -181,13 +426,13 @@ class UserController extends Controller
 
     public function addLog()
     {
-        $this->isFreeSpace();
+        $this->checkFreeSpace();
         $dateFile = date("dmY");
         $logName = $this->randomFileName;
         $logTime = date("d-m-Y h:i:sa");
         $logSize = $this->convertSize();
         $logFileName = $this->config::LOG_PATH . "upload_$dateFile.log";
-        if ($this->fileCode === 1 && $logSize > 0) {
+        if (!$this->fileCode === false && $logSize > 0) {
             $logCode = 'Upload successful';
         } else {
             $logCode = 'Not upload';
@@ -201,25 +446,57 @@ class UserController extends Controller
         $fileActualExt = strtolower(end($fileExt));
         $this->randomFileName = uniqid('', true) . '.' . $fileActualExt;
         $fileDestination = $this->config::UPLOAD_PATH . $this->randomFileName;
-        if(in_array($fileActualExt, $this->config::EXTENSION)) {
+        if (in_array($fileActualExt, $this->config::EXTENSION)) {
             if ($this->fileError === 0) {
-                $this->fileCode = 1;
+                $this->fileCode = true;
                 $this->model->uploadFile($this->fileTmpName, $fileDestination);
             }
         } else {
-            $this->fileCode = 0;
+            $this->fileCode = false;
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function add()
     {
         $this->getData();
         $this->checkUploadDir();
-        $this->checkLogDir();
-        $this->isFreeSpace();
-        $this->uploadData();
-        $this->getExifData();
-        $this->addLog();
+        $this->checkLogDir(); // add true or false
+        if ($this->checkFreeSpace() === true) {
+            $this->uploadData();
+            $this->getExifData();
+            $this->addLog();
+            $this->addFile();
+        } else {
+            $this->addLog();
+        }
+    }
+
+    public function sessionStart()
+    {
+        session_start();
+        $this->session = true;
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function logout()
+    {
+        session_start();
+        session_destroy();
+        $this->session = false;
         $this->index();
+    }
+
+    public function setCookie()
+    {
+        $cookieEmail = $this->email;
+        $secondsInDay = 86400;
+        setcookie($cookieEmail, time() + ($secondsInDay * 7), "/");
     }
 }
