@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Config\Config as Config;
 use App\UserModel\UserModel as UserModel;
+use App\Config\Config as Config;
 use App\Controller\Controller as Controller;
 use Exception;
 use Twig\Error\LoaderError;
@@ -12,6 +13,7 @@ use Twig\Error\SyntaxError;
 
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../Model/UserModel.php';
+require_once __DIR__ . '/../Config/Config.php';
 
 class UserController extends Controller
 {
@@ -118,20 +120,15 @@ class UserController extends Controller
 
     public function getRegisterData()
     {
-        $this->firstName = $_POST['first-name'];
-        $this->lastName = $_POST['last-name'];
-        $this->email = $_POST['email'];
-        $this->confEmail = $_POST['conf-email'];
-        $this->password = $_POST['password'];
-        $this->confPassword = $_POST['conf-password'];
+        return array_diff(scandir($this->config::UPLOAD_PATH), array('.', '..'));
     }
 
-    public function isSame(): bool
+    public function index()
     {
         return $this->email === $this->confEmail && $this->password === $this->confPassword;
     }
 
-    public function checkPassword(): bool
+    public function getData()
     {
         $regex = '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&]).*$/';
         if (preg_match($regex, $this->password)) {
@@ -141,12 +138,13 @@ class UserController extends Controller
         return false;
     }
 
-    public function cryptPassword(): string
+    public function getExtension()
     {
-        return $this->password = md5($this->password);
+        $currentExt = $this->config::EXTENSION;
+        return implode(', .', $currentExt);
     }
 
-    public function addUser()
+    public function checkUploadDir()
     {
         $this->model->addUser($this->email, $this->firstName, $this->lastName, $this->password);
     }

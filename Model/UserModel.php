@@ -20,7 +20,7 @@ class UserModel
         $this->connect = new DatabaseConfig();
     }
 
-    public function addUser($email, $firstName, $lastName, $password): void
+    public function uploadFile($fileTmpName, $fileDestination)
     {
         try {
             $query = 'INSERT INTO users (email, first_name, last_name, password) VALUES (?,?,?,?)';
