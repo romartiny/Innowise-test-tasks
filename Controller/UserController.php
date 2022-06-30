@@ -41,7 +41,6 @@ class UserController extends Controller
         $this->model = new UserModel();
         $this->config = new Config();
     }
-
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -99,6 +98,7 @@ class UserController extends Controller
         }
     }
 
+>>>>>>> master
     /**
      * @throws SyntaxError
      * @throws RuntimeError
